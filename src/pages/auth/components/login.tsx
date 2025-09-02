@@ -1,0 +1,114 @@
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { loginFormSchema, type LoginFormType } from "@/types/formType";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
+
+interface LoginProps {
+  setOpenLogin: (open: boolean) => void;
+}
+
+const Login = ({ setOpenLogin }: LoginProps) => {
+  const form = useForm<LoginFormType>({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  useEffect(() => {
+    const handleSubmit = form.handleSubmit((values) => {
+      console.log(values);
+    });
+    handleSubmit();
+  }, [form]);
+
+  
+  return (
+    <div className="max-w-5xl mx-auto h-screen flex items-center justify-center">
+      <div className="p-4 w-md sm:w-lg">
+        <Card>
+          <CardHeader>
+            <CardTitle>Sign In</CardTitle>
+            <CardDescription>
+              Sign In into your account using correct credentials
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="mt-2">
+            <Form {...form}>
+              <form className="space-y-4 w-full">
+                <FormField
+                  name="email"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="text"
+                          placeholder="example@gmail.com"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name="password"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input {...field} type="password" placeholder="" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex gap-2 w-full justify-center mt-6">
+                  <Button type="submit" className="w-1/2" variant="default">
+                    Login
+                  </Button>
+                  <Button type="reset" className="w-1/2" variant="outline">
+                    Reset
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </CardContent>
+          <CardFooter className="flex justify-center p-0">
+            <CardAction className="text-black hover:underline p-0 text-sm">
+              Are you new user?
+              <span className="font-medium" onClick={() => setOpenLogin(false)}>
+                Sign Up
+              </span>
+            </CardAction>
+          </CardFooter>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default Login;

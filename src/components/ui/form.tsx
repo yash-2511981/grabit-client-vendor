@@ -19,17 +19,6 @@ import { FormFieldContext, FormItemContext } from "@/context/form-context";
 
 const Form = FormProvider;
 
-// type FormFieldContextValue<
-//   TFieldValues extends FieldValues = FieldValues,
-//   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
-// > = {
-//   name: TName
-// }
-
-// const FormFieldContext = React.createContext<FormFieldContextValue>(
-//   {} as FormFieldContextValue
-// )
-
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
@@ -141,7 +130,7 @@ function FormMessage({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="form-message"
       id={formMessageId}
-      className={cn("text-destructive text-sm", className)}
+      className={cn("text-destructive text-xs", className)}
       {...props}
     >
       {body}

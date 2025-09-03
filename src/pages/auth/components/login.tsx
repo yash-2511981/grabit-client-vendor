@@ -20,7 +20,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
 
 interface LoginProps {
   setOpenLogin: (open: boolean) => void;
@@ -35,14 +34,10 @@ const Login = ({ setOpenLogin }: LoginProps) => {
     },
   });
 
-  useEffect(() => {
-    const handleSubmit = form.handleSubmit((values) => {
-      console.log(values);
-    });
-    handleSubmit();
-  }, [form]);
+  const onSubmit = (data: LoginFormType) => {
+    console.log(data);
+  };
 
-  
   return (
     <div className="max-w-5xl mx-auto h-screen flex items-center justify-center">
       <div className="p-4 w-md sm:w-lg">
@@ -55,7 +50,10 @@ const Login = ({ setOpenLogin }: LoginProps) => {
           </CardHeader>
           <CardContent className="mt-2">
             <Form {...form}>
-              <form className="space-y-4 w-full">
+              <form
+                className="space-y-4 w-full"
+                onSubmit={form.handleSubmit(onSubmit)}
+              >
                 <FormField
                   name="email"
                   control={form.control}
@@ -90,7 +88,12 @@ const Login = ({ setOpenLogin }: LoginProps) => {
                   <Button type="submit" className="w-1/2" variant="default">
                     Login
                   </Button>
-                  <Button type="reset" className="w-1/2" variant="outline">
+                  <Button
+                    type="button"
+                    className="w-1/2"
+                    variant="outline"
+                    onClick={() => form.reset()}
+                  >
                     Reset
                   </Button>
                 </div>
@@ -99,8 +102,11 @@ const Login = ({ setOpenLogin }: LoginProps) => {
           </CardContent>
           <CardFooter className="flex justify-center p-0">
             <CardAction className="text-black hover:underline p-0 text-sm">
-              Are you new user?
-              <span className="font-medium" onClick={() => setOpenLogin(false)}>
+              Are you new user?{" "}
+              <span
+                className="font-medium cursor-pointer"
+                onClick={() => setOpenLogin(false)}
+              >
                 Sign Up
               </span>
             </CardAction>

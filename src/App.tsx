@@ -4,6 +4,9 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/dashboard/Dashboard";
 import Landing from "./pages/landing/landing";
 import Auth from "./pages/auth/Auth";
+import useApi from "./hooks/useApi";
+import { GET_VENDOR_INFO } from "./lib/routes";
+import useVendorStore from "./store/store";
 
 interface RouteWrapperProps {
   children: ReactNode;
@@ -22,31 +25,59 @@ function PriavteRoutes({ children }: RouteWrapperProps) {
 }
 
 function Layout({ children }: { children: ReactNode }) {
-  const { vendor } = useAdminStore();
-  const isAuthenticated = !!vendor;
   return (
     <>
       {/* navbar */}
-      {isAuthenticated ? (
-        <PriavteRoutes>{children}</PriavteRoutes>
-      ) : (
-        <AuthRoutes>{children}</AuthRoutes>
-      )}
+      {children}
       {/* footer */}
     </>
   );
 }
 
 function App() {
-  useEffect(() => {}, []);
+  const { get } = useApi();
+  const { setVendor, vendor } = useVendorStore();
+  console.log(vendor);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const getVendorData = await get(GET_VENDOR_INFO);
+      if (getVendorData?.success) {
+        setVendor(getVendorData.data.restaurant);
+      }
+    };
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <BrowserRouter>
       <Layout>
         <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/"
+            element={
+              <AuthRoutes>
+                <Landing />
+              </AuthRoutes>
+            }
+          />
+          <Route
+            path="/auth"
+            element={
+              <AuthRoutes>
+                <Auth />
+              </AuthRoutes>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <PriavteRoutes>
+                <Dashboard />
+              </PriavteRoutes>
+            }
+          />
         </Routes>
       </Layout>
     </BrowserRouter>

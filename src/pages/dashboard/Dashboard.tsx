@@ -1,10 +1,10 @@
+import useVendorStore from "@/store/store";
 
 const Dashboard = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  const { vendor } = useVendorStore();
+  console.log(vendor)
 
-export default Dashboard
+  return <div>DashBoard</div>;
+};
+
+export default Dashboard;

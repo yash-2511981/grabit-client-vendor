@@ -20,12 +20,20 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import useApi from "@/hooks/useApi";
+import { SIGN_IN } from "@/lib/routes";
+import useVendorStore from "@/store/store";
+import { useNavigate } from "react-router-dom";
 
 interface LoginProps {
   setOpenLogin: (open: boolean) => void;
 }
 
 const Login = ({ setOpenLogin }: LoginProps) => {
+  const { post } = useApi();
+  const { setVendor } = useVendorStore();
+  const navigate = useNavigate();
+
   const form = useForm<LoginFormType>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -34,8 +42,12 @@ const Login = ({ setOpenLogin }: LoginProps) => {
     },
   });
 
-  const onSubmit = (data: LoginFormType) => {
-    console.log(data);
+  const onSubmit = async (data: LoginFormType) => {
+    const response = await post(SIGN_IN, data);
+    if (response?.success && response.data) {
+      setVendor(response.data.restaurant);
+      navigate("/dashboard");
+    }
   };
 
   return (

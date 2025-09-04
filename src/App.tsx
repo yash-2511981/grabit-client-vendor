@@ -1,13 +1,18 @@
 import { useEffect, type ReactNode } from "react";
 import useAdminStore from "./store/store";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Dashboard from "./pages/dashboard/Dashboard";
+import Dashboard from "./pages/vendor/dashboard/Dashboard";
 import Landing from "./pages/landing/landing";
 import Auth from "./pages/auth/Auth";
 import useApi from "./hooks/useApi";
 import { GET_VENDOR_INFO } from "./lib/routes";
 import useVendorStore from "./store/store";
-
+import VendorLayout from "./pages/vendor/VendorLayout";
+import ManageProduct from "./pages/vendor/products/ManageProduct";
+import ManageOrders from "./pages/vendor/orders/ManageOrders";
+import ManageProfile from "./pages/vendor/profile/ManageProfile";
+import ManageSubscriptions from "./pages/vendor/subscriptions/ManageSubscriptions";
+import ManageWallet from "./pages/vendor/wallet/MangeWallet";
 interface RouteWrapperProps {
   children: ReactNode;
 }
@@ -22,16 +27,6 @@ function PriavteRoutes({ children }: RouteWrapperProps) {
   const { vendor } = useAdminStore();
   const isAuthenticated = !!vendor;
   return isAuthenticated ? children : <Navigate to="/" />;
-}
-
-function Layout({ children }: { children: ReactNode }) {
-  return (
-    <>
-      {/* navbar */}
-      {children}
-      {/* footer */}
-    </>
-  );
 }
 
 function App() {
@@ -52,34 +47,40 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <AuthRoutes>
-                <Landing />
-              </AuthRoutes>
-            }
-          />
-          <Route
-            path="/auth"
-            element={
-              <AuthRoutes>
-                <Auth />
-              </AuthRoutes>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <PriavteRoutes>
-                <Dashboard />
-              </PriavteRoutes>
-            }
-          />
-        </Routes>
-      </Layout>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <AuthRoutes>
+              <Landing />
+            </AuthRoutes>
+          }
+        />
+        <Route
+          path="/auth"
+          element={
+            <AuthRoutes>
+              <Auth />
+            </AuthRoutes>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <PriavteRoutes>
+              <VendorLayout />
+            </PriavteRoutes>
+          }
+        >
+          <Route index element={<Dashboard />} />
+          <Route path="products" element={<ManageProduct />} />
+          <Route path="orders" element={<ManageOrders />} />
+          <Route path="profile" element={<ManageProfile />} />
+          <Route path="subscriptions" element={<ManageSubscriptions />} />
+          <Route path="wallet" element={<ManageWallet />} />
+          <Route element={<Dashboard />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }

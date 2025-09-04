@@ -12,7 +12,7 @@ const useApi = () => {
     successMessage?: string
   ) => {
     try {
-      const Config: { withCredentials: boolean } = { withCredentials: true };
+      const Config = { withCredentials: true };
       let response: AxiosResponse;
       switch (method) {
         case "get":
@@ -49,7 +49,7 @@ const useApi = () => {
   };
 
   return {
-    post: <T>(route: string, data: T, successMessage: string) =>
+    post: <T>(route: string, data: T, successMessage?: string) =>
       makeAPIRequest("post", route, data, successMessage),
     get: (route: string) => makeAPIRequest("get", route, undefined, undefined),
     patch: <T>(route: string, data: T, successMessage: string) =>

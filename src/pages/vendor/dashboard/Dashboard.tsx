@@ -1,13 +1,6 @@
-import ActionBar from "@/components/ActionBar";
-import { useState } from "react";
-
 const Dashboard = () => {
-  const [openServie, setOpenServie] = useState("view");
-
   return (
-    <div className="h-full space-y-6 p-4">
-      {/* Action Container */}
-      <ActionBar setOpenService={setOpenServie} openService={openServie} />
+    <div className="h-full space-y-6 px-2 sm:p-4 flex flex-col overflow-x-hidden">
       <div></div>
     </div>
   );

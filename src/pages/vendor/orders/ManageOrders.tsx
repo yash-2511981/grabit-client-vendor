@@ -1,10 +1,32 @@
+import ActionBar from "@/components/ActionBar";
+import type { service } from "@/types/types";
+import { CircleCheckIcon, Clock } from "lucide-react";
+import { useState } from "react";
+
+const orderServices: service[] = [
+  { text: "Pending", serviceName: "pending", icon: Clock },
+  { text: "Completed", serviceName: "completed", icon: CircleCheckIcon },
+];
 
 const ManageOrders = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  const [openService, setOpenService] = useState<string>("pending");
 
-export default ManageOrders
+  return (
+    <div className="h-full space-y-6 px-2 sm:p-4 flex flex-col overflow-x-hidden">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl sm:text-4xl font-semibold">Orders</h1>
+        <p className="text-muted-foreground">Manage and review your orders.</p>
+      </div>
+      <div className="sm:pt-4 flex">
+        <ActionBar
+          links={orderServices}
+          setOpenService={setOpenService}
+          openService={openService}
+        />
+      </div>
+      <div className="flex flex-1 flex-col"></div>
+    </div>
+  );
+};
+
+export default ManageOrders;

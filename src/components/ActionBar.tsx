@@ -1,23 +1,16 @@
-import type { service } from "@/types/types";
 import Service from "./Service";
-import { Edit2, PlusIcon, StoreIcon, Trash } from "lucide-react";
-
-const productsServices: service[] = [
-  { text: "View Products", icon: StoreIcon, serviceName: "view" },
-  { text: "Add Products", icon: PlusIcon, serviceName: "add" },
-  { text: "Edit Product", icon: Edit2, serviceName: "edit" },
-  { text: "Delete Products", icon: Trash, serviceName: "delete" },
-];
+import type { service } from "@/types/types";
 
 interface ActionBarProps {
   setOpenService: (service: string) => void;
   openService: string;
+  links: service[];
 }
 
-const ActionBar = ({ setOpenService, openService }: ActionBarProps) => {
+const ActionBar = ({ setOpenService, openService, links }: ActionBarProps) => {
   return (
-    <div className="p-4 md:w-fit gap-3 rounded-md mx-auto border grid grid-flow-col drop-shadow-lg shadow-lg">
-      {productsServices.map((service, index) => (
+    <div className="gap-3 grid grid-flow-col max-w-sm">
+      {links.map((service, index) => (
         <Service
           key={index}
           service={service}

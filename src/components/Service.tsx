@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { service } from "@/types/types";
+import { Button } from "./ui/button";
 
 interface ServiceProps {
   setOpen: (service: string) => void;
@@ -9,14 +10,15 @@ interface ServiceProps {
 
 const Service = ({ service, setOpen, open }: ServiceProps) => {
   return (
-    <div
-      className={cn("w-full p-2 flex justify-center gap-4 border rounded-sm", {
-        "bg-amber-600": open,
+    <Button
+      className={cn("w-35 p-2 flex justify-center gap-2 border rounded-sm", {
+        "bg-primary text-sm": open,
       })}
       onClick={() => setOpen(service.serviceName)}
     >
-      <service.icon /> <span>{service.text}</span>
-    </div>
+      {/* <service.icon />  */}
+      <span>{service.text}</span>
+    </Button>
   );
 };
 

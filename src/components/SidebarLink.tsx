@@ -11,11 +11,14 @@ const SidebarLink = ({
 }) => {
   return (
     <Link
+      title={link.text}
       to={`${link.navigate}`}
-      className={cn("flex gap-2", { "bg-amber-500": active })}
+      className={cn("flex gap-2 p-2 rounded-sm justify-start w-full", {
+        "bg-primary": active,
+      })}
     >
       <link.icon className="" />
-      <span className="md:block hidden">{link.text}</span>
+      <span className="md:block hidden font-medium">{link.text}</span>
     </Link>
   );
 };

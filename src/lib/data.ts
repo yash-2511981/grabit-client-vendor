@@ -1,20 +1,22 @@
 import type { sidebarlink } from "@/types/types";
 import {
+  Calendar,
   LayoutDashboard,
   ListOrderedIcon,
   StoreIcon,
-  SubscriptIcon,
+  User2,
   Wallet,
 } from "lucide-react";
 
 export const sideBarLinks: sidebarlink[] = [
-  { text: "Dashboard", icon: LayoutDashboard, navigate: "/dashboard" },
-  { text: "Products", icon: StoreIcon, navigate: "/dashboard/products" },
-  { text: "Orders", icon: ListOrderedIcon, navigate: "/dashboard/orders" },
+  { text: "Dashboard", icon: LayoutDashboard, navigate: "/vendor" },
+  { text: "Products", icon: StoreIcon, navigate: "/vendor/products" },
+  { text: "Orders", icon: ListOrderedIcon, navigate: "/vendor/orders" },
   {
     text: "Subscriptions",
-    icon: SubscriptIcon,
-    navigate: "/dashboard/subscriptions",
+    icon: Calendar,
+    navigate: "/vendor/subscriptions",
   },
-  { text: "Wallet", icon: Wallet, navigate: "/dashboard/wallet" },
+  { text: "Profile", icon: User2, navigate: "/vendor/profile" },
+  { text: "Wallet", icon: Wallet, navigate: "/vendor/wallet" },
 ];

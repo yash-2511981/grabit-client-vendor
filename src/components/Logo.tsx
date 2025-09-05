@@ -5,7 +5,7 @@ const Logo = () => {
   const navigate = useNavigate();
   return (
     <div
-      className="items-center space-x-1 cursor-pointer flex justify-center md:justify-start p-4"
+      className="items-center space-x-1 cursor-pointer flex justify-center md:justify-start p-2 transition-all duration-300"
       onClick={() => navigate("/dashboard")}
     >
       <div className="w-12 h-12 rounded-full flex items-center justify-center">

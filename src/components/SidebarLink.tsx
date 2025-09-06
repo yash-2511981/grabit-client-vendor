@@ -18,7 +18,7 @@ const SidebarLink = ({
       })}
     >
       <link.icon className="" />
-      <span className="md:block hidden font-medium">{link.text}</span>
+      <span className="font-medium">{link.text}</span>
     </Link>
   );
 };

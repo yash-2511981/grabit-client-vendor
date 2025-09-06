@@ -1,11 +1,12 @@
-import { MenuIcon } from "lucide-react";
-import Logo from "./Logo";
+import MobileNav from "./MobileNav";
 
 const Navbar = () => {
   return (
-    <nav className="w-full text-center h-[60px] flex sm:hidden justify-between items-center px-4">
-      <Logo />
-      <MenuIcon />
+    <nav className="w-full text-center h-[60px] flex md:hidden justify-between items-center px-2">
+      <div className="w-12 h-12 rounded-full flex items-center justify-center">
+        <img src="/logo.png" alt="logo" />
+      </div>
+      <MobileNav />
     </nav>
   );
 };

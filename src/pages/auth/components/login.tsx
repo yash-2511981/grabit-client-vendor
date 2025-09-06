@@ -97,7 +97,7 @@ const Login = ({ setOpenLogin }: LoginProps) => {
                   )}
                 />
                 <div className="flex gap-2 w-full justify-center mt-6">
-                  <Button type="submit" className="w-1/2" variant="default">
+                  <Button type="submit" className="w-1/2" variant="primary">
                     Login
                   </Button>
                   <Button

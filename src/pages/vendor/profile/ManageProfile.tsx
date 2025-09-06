@@ -14,9 +14,9 @@ const ManageProfile = () => {
   return (
     <div className="h-full space-y-6 px-2 sm:p-4 flex flex-col overflow-x-hidden">
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl sm:text-4xl font-semibold">Subscriptions</h1>
+        <h1 className="text-3xl sm:text-4xl font-semibold">Profile Overview</h1>
         <p className="text-muted-foreground">
-          Add, Review and Manage your subscriptions.
+          Mange your buisness details here.
         </p>
       </div>
       <div className="sm:pt-4 flex">

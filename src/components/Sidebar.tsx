@@ -6,16 +6,23 @@ import { LogOut, User } from "lucide-react";
 import { Button } from "./ui/button";
 import useVendorStore from "@/store/store";
 import useApi from "@/hooks/useApi";
-import { toast } from "sonner";
+import { SIGN_OUT } from "@/lib/routes";
 
 const Sidebar = () => {
   const params = useLocation();
-  const { vendor } = useVendorStore();
+  const { vendor, logout } = useVendorStore();
   const navigate = useNavigate();
-  const { post } = useApi();
+  const { get } = useApi();
 
   const handlLogout = async () => {
-    toast.success("Logged out");
+    try {
+      const response = await get(SIGN_OUT);
+      if (response?.success) {
+        logout();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

@@ -30,3 +30,28 @@ export const registerFormSchema = z.object({
 });
 
 export type RegisterFormSchema = z.infer<typeof registerFormSchema>;
+
+//product related schemas
+export const addProductSchema = z.object({
+  name: z
+    .string({ error: "Name is required" })
+    .min(5, { error: "Name must be at least 5 characters" })
+    .regex(/^[A-Za-z\s]+$/, { error: "Name must contain only letters" }),
+
+  description: z
+    .string({ error: "Description is required" })
+    .min(20, { error: "At least 20 characters" })
+    .max(50, { error: "Description should not be more than 50 chars" })
+    .regex(/^[A-Za-z\s]+$/, {
+      error: "Description must contain only letters",
+    }),
+
+  price: z
+    .string({ error: "Price is required" })
+    .regex(/^[0-9]+$/, { error: "Price must contain only numbers" }),
+
+  category: z.enum(["veg", "non-veg"]),
+  imageUrl: z.string({ error: "Image is required" }),
+});
+
+export type ProductType = z.infer<typeof addProductSchema>;

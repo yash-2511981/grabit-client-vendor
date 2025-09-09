@@ -1,8 +1,8 @@
 import Service from "./Service";
-import type { service } from "@/types/types";
+import type { service, vendorservices } from "@/types/types";
 
 interface ActionBarProps {
-  setOpenService: (service: string) => void;
+  setOpenService: (service: vendorservices) => void;
   openService: string;
   links: service[];
 }

@@ -1,15 +1,16 @@
 import ActionBar from "@/components/ActionBar";
-import type { service } from "@/types/types";
+import type { service, vendorservices } from "@/types/types";
 import { PlusIcon, StoreIcon } from "lucide-react";
 import { useState } from "react";
+import AddOrEditProduct from "./forms/AddProduct";
 
 const productsServices: service[] = [
-  { text: "View Products", icon: StoreIcon, serviceName: "view" },
-  { text: "Add Products", icon: PlusIcon, serviceName: "add" },
+  { text: "View Products", icon: StoreIcon, serviceName: "viewProduct" },
+  { text: "Add Products", icon: PlusIcon, serviceName: "addOrEditProduct" },
 ];
 
 const ManageProduct = () => {
-  const [openServie, setOpenServie] = useState("view");
+  const [openServie, setOpenService] = useState<vendorservices>("viewProduct");
 
   return (
     <div className="h-full space-y-6 px-2 sm:p-4 flex flex-col overflow-x-hidden">
@@ -22,9 +23,12 @@ const ManageProduct = () => {
       <div className="sm:pt-4 flex">
         <ActionBar
           links={productsServices}
-          setOpenService={setOpenServie}
+          setOpenService={setOpenService}
           openService={openServie}
         />
+      </div>
+      <div className="flex flex-col py-2 flex-1 overflow-y-auto hide-scrollbar">
+        {openServie === "addOrEditProduct" && <AddOrEditProduct />}
       </div>
     </div>
   );

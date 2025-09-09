@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
-import type { service } from "@/types/types";
+import type { service, vendorservices } from "@/types/types";
 import { Button } from "./ui/button";
 
 interface ServiceProps {
-  setOpen: (service: string) => void;
+  setOpen: (service: vendorservices) => void;
   service: service;
   open: boolean;
 }

@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import useVendorStore from "@/store/store";
-import { addProductSchema, type ProductType } from "@/types/formType";
+import { addProductSchema, type AddOrEditProductType } from "@/types/formType";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -22,24 +22,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useRef } from "react";
 
 const AddOrEditProduct = () => {
   const { editProduct } = useVendorStore();
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const form = useForm<ProductType>({
+  const form = useForm<AddOrEditProductType>({
     resolver: zodResolver(addProductSchema),
     defaultValues: {
       name: editProduct?.name || "",
       description: editProduct?.description || "",
       price: editProduct?.price,
       category: editProduct?.category,
-      imageUrl: editProduct?.imageUrl,
     },
   });
 
-  const onSubmit = (values: ProductType) => {
+  const onSubmit = (values: AddOrEditProductType) => {
     console.log("Form submitted:", values);
-    // 🔥 here you can call store actions or API
   };
 
   return (
@@ -92,7 +92,7 @@ const AddOrEditProduct = () => {
                   control={form.control}
                   name="category"
                   render={({ field }) => (
-                    <FormItem className="flex ">
+                    <FormItem className="flex gap-4">
                       <FormLabel>Choose Category</FormLabel>
                       <FormControl>
                         <RadioGroup
@@ -141,13 +141,43 @@ const AddOrEditProduct = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Image</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="file"
-                        placeholder="https://example.com/image.jpg"
-                        {...field}
-                      />
-                    </FormControl>
+                    <div className="flex gap-2 ">
+                      <FormControl>
+                        <Input
+                          type="file"
+                          accept="image/"
+                          ref={(el) => {
+                            inputRef.current = el;
+                            field.ref(el);
+                          }}
+                          value={undefined}
+                          placeholder="https://example.com/image.jpg"
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            field.onChange(file);
+
+                            if (file) {
+                              setTimeout(async () => {
+                                await form.trigger("imageUrl");
+                              }, 0);
+                            }
+                          }}
+                        />
+                      </FormControl>
+                      <Button
+                        variant="outline"
+                        className="text-xs sm:text-sm"
+                        type="button"
+                        onClick={() => {
+                          field.onChange(null);
+                          if (inputRef.current) {
+                            inputRef.current.value = "";
+                          }
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}

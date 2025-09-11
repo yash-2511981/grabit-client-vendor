@@ -33,6 +33,17 @@ export type RegisterFormSchema = z.infer<typeof registerFormSchema>;
 
 //product related schemas
 export const addProductSchema = z.object({
+  imageUrl: z
+    .custom<File>()
+    .optional()
+    .refine(
+      (file) =>
+        !file || (file instanceof File && file.type.startsWith("image/")),
+      { error: "Please upload only images" }
+    )
+    .refine((file) => file && file.size <= 1024 * 1024 * 2, {
+      error: "File size should bb less than or equal to 2 MB",
+    }),
   name: z
     .string({ error: "Name is required" })
     .min(5, { error: "Name must be at least 5 characters" })
@@ -51,7 +62,6 @@ export const addProductSchema = z.object({
     .regex(/^[0-9]+$/, { error: "Price must contain only numbers" }),
 
   category: z.enum(["veg", "non-veg"]),
-  imageUrl: z.string({ error: "Image is required" }),
 });
 
-export type ProductType = z.infer<typeof addProductSchema>;
+export type AddOrEditProductType = z.infer<typeof addProductSchema>;

@@ -47,13 +47,19 @@ const ManageProduct = () => {
           <Button
             className="p-2 justify-center gap-2 border rounded-sm flex"
             onClick={handleEditClick}
-            disabled={selectedProducts.length !== 1}
+            disabled={
+              selectedProducts.length !== 1 ||
+              openService === "addOrEditProduct"
+            }
           >
             <Edit />
           </Button>
 
           <Button
-            disabled={selectedProducts.length === 0}
+            disabled={
+              selectedProducts.length === 0 ||
+              openService === "addOrEditProduct"
+            }
             className="p-2 flex justify-center gap-2 border rounded-sm"
             onClick={handleDeleteClick}
           >

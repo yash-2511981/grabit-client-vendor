@@ -42,7 +42,7 @@ export const addProductSchema = z.object({
       { error: "Please upload only images" }
     )
     .refine((file) => file && file.size <= 1024 * 1024 * 2, {
-      error: "File size should bb less than or equal to 2 MB",
+      error: "File size should b less than or equal to 2 MB",
     }),
   name: z
     .string({ error: "Name is required" })

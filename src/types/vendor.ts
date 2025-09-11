@@ -1,5 +1,3 @@
-import type { ProductType } from "./formType";
-
 export type Vendor = {
   id: string;
   name: string;
@@ -8,10 +6,23 @@ export type Vendor = {
   address: string;
 };
 
+export type ProductType = {
+  _id: string;
+  name: string;
+  description: string;
+  price: string;
+  category: "veg" | "non-veg";
+  imageUrl: string;
+};
+
 export type VendorSlices = {
   vendor: Vendor | null;
   setVendor: (admin: Vendor) => void;
+  products: ProductType[];
+  setProducts: (products: ProductType[]) => void;
   editProduct: ProductType | null;
-  setEditProduct: (product: ProductType) => void;
+  setEditProduct: () => void;
+  selectedProducts: string[];
+  addSelectedProducts: (product: string) => void;
   logout: () => void;
 };

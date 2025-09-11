@@ -42,6 +42,14 @@ const AddOrEditProduct = () => {
     console.log("Form submitted:", values);
   };
 
+  const handlePhotoUpload = async () => {
+    //take file
+    //check if is there any image url present already if yes ask backend to delete that image from storage
+    //ask safe upload url to backend
+    //upload file to vercel blob
+    //save return url in in imagerul
+  };
+
   return (
     <div className="p-4">
       <Card className="p-4">
@@ -164,19 +172,30 @@ const AddOrEditProduct = () => {
                           }}
                         />
                       </FormControl>
-                      <Button
-                        variant="outline"
-                        className="text-xs sm:text-sm"
-                        type="button"
-                        onClick={() => {
-                          field.onChange(null);
-                          if (inputRef.current) {
-                            inputRef.current.value = "";
-                          }
-                        }}
-                      >
-                        Remove
-                      </Button>
+                      {inputRef.current ? (
+                        <Button
+                          variant="outline"
+                          className="text-xs sm:text-sm"
+                          type="button"
+                          onClick={handlePhotoUpload}
+                        >
+                          Upload
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="outline"
+                          className="text-xs sm:text-sm"
+                          type="button"
+                          onClick={() => {
+                            field.onChange(null);
+                            if (inputRef.current) {
+                              inputRef.current.value = "";
+                            }
+                          }}
+                        >
+                          Remove
+                        </Button>
+                      )}
                     </div>
                     <FormMessage />
                   </FormItem>

@@ -1,5 +1,5 @@
 import { LogOut, MenuIcon, User } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
 import Logo from "./Logo";
 import SidebarLink from "./SidebarLink";
 import { sideBarLinks } from "@/lib/data";
@@ -7,16 +7,23 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import useVendorStore from "@/store/store";
 import useApi from "@/hooks/useApi";
-import { toast } from "sonner";
+import { SIGN_OUT } from "@/lib/routes";
 
 const MobileNav = () => {
   const params = useLocation();
-  const { vendor } = useVendorStore();
+  const { vendor, logout } = useVendorStore();
   const navigate = useNavigate();
-  const { post } = useApi();
+  const { get } = useApi();
 
   const handlLogout = async () => {
-    toast.success("Logged out");
+    try {
+      const response = await get(SIGN_OUT);
+      if (response?.success) {
+        logout();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <Sheet>
@@ -30,21 +37,24 @@ const MobileNav = () => {
           <div className="flex flex-col">
             <div className="mt-5 flex flex-col space-y-2 p-3 ">
               <h3 className="font-bold text-sm">Dashboard</h3>
-              <SidebarLink
-                link={sideBarLinks[0]}
-                active={params.pathname === sideBarLinks[0].navigate}
-              />
+              <SheetClose asChild>
+                <SidebarLink
+                  link={sideBarLinks[0]}
+                  active={params.pathname === sideBarLinks[0].navigate}
+                />
+              </SheetClose>
             </div>
             <div className="flex flex-col space-y-2 p-3">
               <h3 className="font-bold text-sm">Services</h3>
               {sideBarLinks.map((link, index) => {
                 if (index !== 0)
                   return (
-                    <SidebarLink
-                      link={link}
-                      key={index}
-                      active={params.pathname === link.navigate}
-                    />
+                    <SheetClose asChild key={index}>
+                      <SidebarLink
+                        link={link}
+                        active={params.pathname === link.navigate}
+                      />
+                    </SheetClose>
                   );
               })}
             </div>

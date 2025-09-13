@@ -33,9 +33,8 @@ export type RegisterFormSchema = z.infer<typeof registerFormSchema>;
 
 //product related schemas
 export const addProductSchema = z.object({
-  imageUrl: z
+  photo: z
     .custom<File>()
-    .optional()
     .refine(
       (file) =>
         !file || (file instanceof File && file.type.startsWith("image/")),

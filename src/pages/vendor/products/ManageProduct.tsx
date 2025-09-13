@@ -68,7 +68,9 @@ const ManageProduct = () => {
         </div>
       </div>
       <div className="flex flex-col py-2 flex-1 overflow-y-auto hide-scrollbar">
-        {openService === "addOrEditProduct" && <AddOrEditProduct />}
+        {openService === "addOrEditProduct" && (
+          <AddOrEditProduct setOpenService={setOpenService} />
+        )}
       </div>
     </div>
   );

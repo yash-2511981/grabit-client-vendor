@@ -22,11 +22,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { Eye, X } from "lucide-react";
+import { ADD_PRODUCT } from "@/lib/routes";
+import apiCLient from "@/lib/axios-client";
+import { toast } from "sonner";
+import type { vendorservices } from "@/types/types";
+import ShowUploadedImage from "@/components/showUploadedImage";
 
-const AddOrEditProduct = () => {
+const AddOrEditProduct = ({
+  setOpenService,
+}: {
+  setOpenService: (service: vendorservices) => void;
+}) => {
   const { editProduct } = useVendorStore();
   const inputRef = useRef<HTMLInputElement>(null);
+  const [openImageWindow, setOpenImageWindow] = useState(false);
 
   const form = useForm<AddOrEditProductType>({
     resolver: zodResolver(addProductSchema),
@@ -38,20 +49,44 @@ const AddOrEditProduct = () => {
     },
   });
 
-  const onSubmit = (values: AddOrEditProductType) => {
+  const onSubmit = async (values: AddOrEditProductType) => {
+    const formData = new FormData();
+    formData.append("name", values.name);
+    formData.append("price", values.price);
+    formData.append("description", values.description);
+    formData.append("category", values.category);
+    formData.append("file", values.photo);
     console.log("Form submitted:", values);
+
+    try {
+      const result = await apiCLient.post(ADD_PRODUCT, formData, {
+        withCredentials: true,
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      if (result.status === 200) {
+        toast.success("Product Created");
+        setOpenService("viewProduct");
+      } else {
+        toast.success("failed while creation");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handlePhotoUpload = async () => {
-    //take file
-    //check if is there any image url present already if yes ask backend to delete that image from storage
-    //ask safe upload url to backend
-    //upload file to vercel blob
-    //save return url in in imagerul
+  const getImageUrl = () => {
+    const photo = form.getValues().photo;
+
+    if (photo instanceof File) {
+      return URL.createObjectURL(photo);
+    }
+
+    return editProduct?.imageUrl || "";
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 relative">
       <Card className="p-4">
         <CardHeader>
           <CardTitle className="text-xl">
@@ -145,7 +180,7 @@ const AddOrEditProduct = () => {
               {/* Image URL */}
               <FormField
                 control={form.control}
-                name="imageUrl"
+                name="photo"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Image</FormLabel>
@@ -166,35 +201,38 @@ const AddOrEditProduct = () => {
 
                             if (file) {
                               setTimeout(async () => {
-                                await form.trigger("imageUrl");
+                                await form.trigger("photo");
                               }, 0);
                             }
                           }}
                         />
                       </FormControl>
-                      {inputRef.current ? (
-                        <Button
-                          variant="outline"
-                          className="text-xs sm:text-sm"
-                          type="button"
-                          onClick={handlePhotoUpload}
-                        >
-                          Upload
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="outline"
-                          className="text-xs sm:text-sm"
-                          type="button"
-                          onClick={() => {
-                            field.onChange(null);
-                            if (inputRef.current) {
-                              inputRef.current.value = "";
-                            }
-                          }}
-                        >
-                          Remove
-                        </Button>
+                      {form.getValues().photo && (
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            type="button"
+                            onClick={() => {
+                              setOpenImageWindow(true);
+                            }}
+                          >
+                            <Eye />
+                          </Button>
+
+                          <Button
+                            variant="outline"
+                            className="text-xs sm:text-sm"
+                            type="button"
+                            onClick={() => {
+                              field.onChange(null);
+                              if (inputRef.current) {
+                                inputRef.current.value = "";
+                              }
+                            }}
+                          >
+                            <X />
+                          </Button>
+                        </div>
                       )}
                     </div>
                     <FormMessage />
@@ -210,6 +248,13 @@ const AddOrEditProduct = () => {
           </Form>
         </CardContent>
       </Card>
+
+      {openImageWindow && (
+        <ShowUploadedImage
+          image={getImageUrl()}
+          close={() => setOpenImageWindow(false)}
+        />
+      )}
     </div>
   );
 };

@@ -5,3 +5,7 @@ export const SIGN_IN = `${AUTH_ROUTES}/sign-in`;
 export const SIGN_UP = `${AUTH_ROUTES}/sign-up`;
 export const SIGN_OUT = `${AUTH_ROUTES}/sign-out`;
 export const GET_VENDOR_INFO = `${AUTH_ROUTES}/get-vendor-info`;
+
+//upload routes
+export const UPLOAD_IMAGE = `${AUTH_ROUTES}/get-upload-product-url`;
+export const ADD_PRODUCT = `${AUTH_ROUTES}/add-product`;

@@ -5,21 +5,42 @@ export const vendorSlices: StateCreator<VendorSlices> = (set, get) => ({
   vendor: null,
   setVendor: (vendor: Vendor) => set({ vendor }),
   products: [],
-  setProducts: (products) => set({ products: [...products] }),
-  editProduct: null,
-  setEditProduct: () => {
-    const editProduct = get().products.find(
-      (p) => p._id === get().selectedProducts[0]
-    );
-    set({ editProduct });
+  setProducts: (products) => set({ products }),
+  addNewProduct: (product) => {
+    const products = [...get().products];
+    products.unshift(product);
+    const newProducts = [...products];
+    set({ products: newProducts });
+  },
+  updateProduct: (product) => {
+    const products = [...get().products];
+    const index = products.findIndex((p) => p._id === product._id);
+
+    if (index !== -1) {
+      products[index] = { ...products[index], ...product }; // replace at index
+      set({ products });
+    }
   },
   selectedProducts: [],
-  addSelectedProducts: (product) => {
+  selectProduct: (product) => {
     const selectedProducts = [...get().selectedProducts, product];
     set({ selectedProducts });
+  },
+  deselectProduct: (product) => {
+    const selectedProducts = [...get().selectedProducts];
+    const newList = selectedProducts.filter((p) => p !== product);
+    set({ selectedProducts: newList });
+  },
+  editProduct: null,
+  setEditProduct: (id) => {
+    const editProduct = get().products.find((p) => p._id === id);
+
+    set({ editProduct });
   },
   logout: () =>
     set({
       vendor: null,
+      products: [],
+      selectedProducts: [],
     }),
 });

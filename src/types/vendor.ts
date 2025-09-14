@@ -13,6 +13,8 @@ export type ProductType = {
   price: string;
   category: "veg" | "non-veg";
   imageUrl: string;
+  ratingCount: number;
+  rating: number;
 };
 
 export type VendorSlices = {
@@ -20,9 +22,12 @@ export type VendorSlices = {
   setVendor: (admin: Vendor) => void;
   products: ProductType[];
   setProducts: (products: ProductType[]) => void;
-  editProduct: ProductType | null;
-  setEditProduct: () => void;
+  addNewProduct: (product: ProductType) => void;
+  updateProduct: (product: ProductType) => void;
   selectedProducts: string[];
-  addSelectedProducts: (product: string) => void;
+  selectProduct: (product: string) => void;
+  deselectProduct: (product: string) => void;
+  editProduct: ProductType | null;
+  setEditProduct: (product: string | null) => void;
   logout: () => void;
 };

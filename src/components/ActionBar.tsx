@@ -15,10 +15,13 @@ const ActionBar = ({ setOpenService, openService, links }: ActionBarProps) => {
         <Button
           key={index}
           variant={openService === service.serviceName ? "primary" : "outline"}
-          className={cn("w-35 p-2 flex justify-center gap-2 border rounded-sm ")}
+          className={cn(
+            "w-35 p-2 flex justify-center gap-2 border rounded-sm ",
+            { "w-10": !service.text }
+          )}
           onClick={() => setOpenService(service.serviceName)}
         >
-          <span>{service.text}</span>
+          {service.text ? <span>{service.text}</span> : <service.icon />}
         </Button>
       ))}
     </div>

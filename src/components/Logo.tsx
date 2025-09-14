@@ -6,7 +6,7 @@ const Logo = () => {
   return (
     <div
       className="items-center space-x-1 cursor-pointer flex justify-start md:justify-start p-2 transition-all duration-300"
-      onClick={() => navigate("/dashboard")}
+      onClick={() => navigate("/vendor")}
     >
       <div className="w-12 h-12 rounded-full flex items-center justify-center">
         <img src={logo} alt="logo" />

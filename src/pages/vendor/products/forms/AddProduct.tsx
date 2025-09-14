@@ -24,18 +24,21 @@ import {
 } from "@/components/ui/card";
 import { useRef, useState } from "react";
 import { Eye, X } from "lucide-react";
-import { ADD_PRODUCT } from "@/lib/routes";
+import { ADD_PRODUCT, UPDATE_PRODUCT } from "@/lib/routes";
 import apiCLient from "@/lib/axios-client";
 import { toast } from "sonner";
 import type { vendorservices } from "@/types/types";
 import ShowUploadedImage from "@/components/showUploadedImage";
+import type { ProductType } from "@/types/vendor";
 
 const AddOrEditProduct = ({
   setOpenService,
+  editProduct,
 }: {
   setOpenService: (service: vendorservices) => void;
+  editProduct: ProductType | null;
 }) => {
-  const { editProduct } = useVendorStore();
+  const { addNewProduct, updateProduct } = useVendorStore();
   const inputRef = useRef<HTMLInputElement>(null);
   const [openImageWindow, setOpenImageWindow] = useState(false);
 
@@ -44,31 +47,63 @@ const AddOrEditProduct = ({
     defaultValues: {
       name: editProduct?.name || "",
       description: editProduct?.description || "",
-      price: editProduct?.price,
+      price: editProduct?.price || "",
       category: editProduct?.category,
     },
   });
 
   const onSubmit = async (values: AddOrEditProductType) => {
     const formData = new FormData();
-    formData.append("name", values.name);
-    formData.append("price", values.price);
-    formData.append("description", values.description);
-    formData.append("category", values.category);
-    formData.append("file", values.photo);
-    console.log("Form submitted:", values);
-
     try {
-      const result = await apiCLient.post(ADD_PRODUCT, formData, {
-        withCredentials: true,
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      if (editProduct) {
+        if (editProduct.name !== values.name)
+          formData.append("name", values.name);
+        if (editProduct.price !== values.price)
+          formData.append("price", values.price);
+        if (editProduct.description !== values.description) {
+          formData.append("description", values.description);
+        }
+        if (editProduct.category !== values.category)
+          formData.append("category", values.category);
+        if (values.photo instanceof File) {
+          formData.append("file", values.photo);
+        }
+        if ([...formData.entries()].length === 0) {
+          toast.info("No changes detected");
+          return;
+        }
+        formData.append("_id", editProduct._id);
 
-      if (result.status === 200) {
-        toast.success("Product Created");
-        setOpenService("viewProduct");
+        const result = await apiCLient.patch(UPDATE_PRODUCT, formData, {
+          withCredentials: true,
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        if (result.status === 200) {
+          updateProduct(result.data.product);
+          toast.success("Product Updated");
+          setOpenService("viewProduct");
+        }
       } else {
-        toast.success("failed while creation");
+        formData.append("name", values.name);
+        formData.append("price", values.price);
+        formData.append("description", values.description);
+        formData.append("category", values.category);
+        if (values.photo instanceof File) {
+          formData.append("file", values.photo);
+        }
+
+        const result = await apiCLient.post(ADD_PRODUCT, formData, {
+          withCredentials: true,
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        if (result.status === 200) {
+          addNewProduct(result.data.product);
+          toast.success("Product Created");
+          setOpenService("viewProduct");
+        } else {
+          toast.success("failed while creation");
+        }
       }
     } catch (error) {
       console.log(error);
@@ -207,8 +242,8 @@ const AddOrEditProduct = ({
                           }}
                         />
                       </FormControl>
-                      {form.getValues().photo && (
-                        <div className="flex gap-2">
+                      <div className="flex gap-2">
+                        {(form.getValues().photo || editProduct) && (
                           <Button
                             variant="outline"
                             type="button"
@@ -218,7 +253,9 @@ const AddOrEditProduct = ({
                           >
                             <Eye />
                           </Button>
+                        )}
 
+                        {form.getValues().photo && (
                           <Button
                             variant="outline"
                             className="text-xs sm:text-sm"
@@ -232,8 +269,8 @@ const AddOrEditProduct = ({
                           >
                             <X />
                           </Button>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                     <FormMessage />
                   </FormItem>

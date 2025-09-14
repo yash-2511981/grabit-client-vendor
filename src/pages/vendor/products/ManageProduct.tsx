@@ -5,25 +5,26 @@ import { useState } from "react";
 import AddOrEditProduct from "./forms/AddProduct";
 import { Button } from "@/components/ui/button";
 import useVendorStore from "@/store/store";
-import { toast } from "sonner";
+import ViewProducts from "./component/ViewProducts";
 
 const productsServices: service[] = [
   { text: "View Products", icon: StoreIcon, serviceName: "viewProduct" },
-  { text: "Add Products", icon: PlusIcon, serviceName: "addOrEditProduct" },
+  {
+    text: "Add Product",
+    icon: PlusIcon,
+    serviceName: "addProduct",
+    emptyState: true,
+  },
 ];
 
 const ManageProduct = () => {
-  const { selectedProducts, setEditProduct } = useVendorStore();
+  const { selectedProducts, setEditProduct, editProduct } = useVendorStore();
   const [openService, setOpenService] = useState<vendorservices>("viewProduct");
 
   const handleEditClick = () => {
     if (selectedProducts.length === 1) {
-      setEditProduct();
-      setOpenService("addOrEditProduct");
-    } else if (selectedProducts.length >= 1) {
-      toast.warning("Please select only one product to edit");
-    } else if (selectedProducts.length == 0) {
-      toast.warning("Select at least one product which you wanted to edit");
+      setEditProduct(selectedProducts[0]);
+      setOpenService("editProduct");
     }
   };
 
@@ -45,22 +46,20 @@ const ManageProduct = () => {
         />
         <div className="flex gap-2 ml-4">
           <Button
-            className="p-2 justify-center gap-2 border rounded-sm flex"
             onClick={handleEditClick}
             disabled={
-              selectedProducts.length !== 1 ||
-              openService === "addOrEditProduct"
+              selectedProducts.length !== 1 || openService === "addProduct"
             }
+            variant={openService === "editProduct" ? "primary" : "outline"}
           >
             <Edit />
           </Button>
 
           <Button
             disabled={
-              selectedProducts.length === 0 ||
-              openService === "addOrEditProduct"
+              selectedProducts.length === 0 || openService === "addProduct"
             }
-            className="p-2 flex justify-center gap-2 border rounded-sm"
+            variant="outline"
             onClick={handleDeleteClick}
           >
             <Trash />
@@ -68,9 +67,19 @@ const ManageProduct = () => {
         </div>
       </div>
       <div className="flex flex-col py-2 flex-1 overflow-y-auto hide-scrollbar">
-        {openService === "addOrEditProduct" && (
-          <AddOrEditProduct setOpenService={setOpenService} />
+        {openService === "addProduct" && (
+          <AddOrEditProduct
+            setOpenService={setOpenService}
+            editProduct={null}
+          />
         )}
+        {openService === "editProduct" && (
+          <AddOrEditProduct
+            setOpenService={setOpenService}
+            editProduct={editProduct}
+          />
+        )}
+        {openService === "viewProduct" && <ViewProducts />}
       </div>
     </div>
   );

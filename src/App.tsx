@@ -31,8 +31,7 @@ function PriavteRoutes({ children }: RouteWrapperProps) {
 
 function App() {
   const { get } = useApi();
-  const { setVendor, vendor } = useVendorStore();
-  console.log(vendor);
+  const { setVendor } = useVendorStore();
 
   useEffect(() => {
     const fetchData = async () => {

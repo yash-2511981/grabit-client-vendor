@@ -24,6 +24,7 @@ export type VendorSlices = {
   setProducts: (products: ProductType[]) => void;
   addNewProduct: (product: ProductType) => void;
   updateProduct: (product: ProductType) => void;
+  deleteProducts: () => void;
   selectedProducts: string[];
   selectProduct: (product: string) => void;
   deselectProduct: (product: string) => void;

@@ -6,6 +6,9 @@ import AddOrEditProduct from "./forms/AddProduct";
 import { Button } from "@/components/ui/button";
 import useVendorStore from "@/store/store";
 import ViewProducts from "./component/ViewProducts";
+import DialogBox from "@/components/DialogueBox";
+import useApi from "@/hooks/useApi";
+import { DELETE_PRODUCT } from "@/lib/routes";
 
 const productsServices: service[] = [
   { text: "View Products", icon: StoreIcon, serviceName: "viewProduct" },
@@ -18,8 +21,11 @@ const productsServices: service[] = [
 ];
 
 const ManageProduct = () => {
-  const { selectedProducts, setEditProduct, editProduct } = useVendorStore();
+  const { selectedProducts, setEditProduct, editProduct, deleteProducts } =
+    useVendorStore();
   const [openService, setOpenService] = useState<vendorservices>("viewProduct");
+  const { post } = useApi();
+  const [openDialogue, setOpenDialogue] = useState(false);
 
   const handleEditClick = () => {
     if (selectedProducts.length === 1) {
@@ -28,10 +34,23 @@ const ManageProduct = () => {
     }
   };
 
-  const handleDeleteClick = () => {};
+  const handleDeleteClick = async () => {
+    console.log(selectedProducts);
+    const result = await post(
+      DELETE_PRODUCT,
+      { selectedProducts: [...selectedProducts] },
+      `${selectedProducts.length} Product${
+        selectedProducts.length > 1 && "s"
+      } deleted successfully `
+    );
+
+    if (result?.success) {
+      deleteProducts();
+    }
+  };
 
   return (
-    <div className="h-full space-y-6 px-2 sm:p-4 flex flex-col overflow-x-hidden">
+    <div className="h-full space-y-6 px-2 sm:p-4 flex flex-col overflow-x-hidden relative">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl sm:text-4xl font-semibold">Products</h1>
         <p className="text-muted-foreground">
@@ -60,7 +79,7 @@ const ManageProduct = () => {
               selectedProducts.length === 0 || openService === "addProduct"
             }
             variant="outline"
-            onClick={handleDeleteClick}
+            onClick={() => setOpenDialogue(true)}
           >
             <Trash />
           </Button>
@@ -81,6 +100,13 @@ const ManageProduct = () => {
         )}
         {openService === "viewProduct" && <ViewProducts />}
       </div>
+      {openDialogue && (
+        <DialogBox
+          open={openDialogue}
+          setOpen={setOpenDialogue}
+          action={handleDeleteClick}
+        />
+      )}
     </div>
   );
 };

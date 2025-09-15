@@ -21,6 +21,14 @@ export const vendorSlices: StateCreator<VendorSlices> = (set, get) => ({
       set({ products });
     }
   },
+  deleteProducts: () => {
+    const { products, selectedProducts } = get();
+
+    set({
+      products: products.filter((p) => !selectedProducts.includes(p._id)),
+      selectedProducts: [],
+    });
+  },
   selectedProducts: [],
   selectProduct: (product) => {
     const selectedProducts = [...get().selectedProducts, product];

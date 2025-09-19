@@ -64,3 +64,24 @@ export const addProductSchema = z.object({
 });
 
 export type AddOrEditProductType = z.infer<typeof addProductSchema>;
+
+export const addOrEditSubscriptionSchema = z.object({
+  name: z
+    .string()
+    .min(1, { error: "required" })
+    .regex(/^[A-Za-z\s]+$/, { error: "name should contain only characters" }),
+  duration: z.enum(["1m", "2m", "3m", "4m"], { error: "invalid input" }),
+  day1: z.string().min(1, { error: "invalid product" }),
+  day2: z.string().min(1, { error: "invalid product" }),
+  day3: z.string().min(1, { error: "invalid product" }),
+  day4: z.string().min(1, { error: "invalid product" }),
+  day5: z.string().min(1, { error: "invalid product" }),
+  day6: z.string().min(1, { error: "invalid product" }),
+  day7: z.string().min(1, { error: "invalid product" }),
+  price: z.string().regex(/^\d+$/, { error: "invalid amount" }),
+  mealtime: z.enum(["breakfast", "lunch", "dinner"]),
+});
+
+export type addOrEditSubscriptionType = z.infer<
+  typeof addOrEditSubscriptionSchema
+>;

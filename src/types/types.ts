@@ -16,4 +16,11 @@ export type service = {
   emptyState?: boolean;
 };
 
+export type metric = {
+  label: string;
+  value: string | number | undefined;
+  icon: LucideIcon;
+  trend?: string | number;
+};
+
 export type sidebarlink = { text: string; icon: LucideIcon; navigate: string };

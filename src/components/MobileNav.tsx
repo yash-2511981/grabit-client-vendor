@@ -30,7 +30,7 @@ const MobileNav = () => {
       <SheetTrigger>
         <MenuIcon />
       </SheetTrigger>
-      <SheetContent side="left" className="w-[250px] h-screen">
+      <SheetContent side="left" className="w-[250px] h-screen app-background">
         <Logo />
 
         <div className="flex flex-col justify-between h-[calc(100vh-80px)]">

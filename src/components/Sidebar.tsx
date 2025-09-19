@@ -26,7 +26,7 @@ const Sidebar = () => {
   };
 
   return (
-    <section className="md:w-fit h-screen hidden md:block  border-r-2 transition-all duration-300 ">
+    <section className="md:w-fit h-screen hidden md:block  border-r-2 transition-all duration-300 app-background ">
       <Logo />
 
       <div className="flex flex-col justify-between h-[calc(100vh-80px)]">
@@ -57,19 +57,25 @@ const Sidebar = () => {
           <div className="border border-amber-400 bg-amber-100 p-6 rounded-full hidden md:flex  items-center justify-center">
             <User size={40} className="text-amber-600" />
           </div>
-          <p className="flex">{vendor?.email}</p>
+          <p className="truncate w-[90%] text-center">{vendor?.email}</p>
           <div className="flex flex-row gap-2 items-center justify-center">
             <Button
               variant="primary"
+              className="min-w-15"
               title="Manage Profile"
               onClick={() => navigate("/vendor/profile")}
             >
               <User className="flex" />
-              <span className="flex">Manage</span>
+              <span className="lg:flex hidden">Manage</span>
             </Button>
-            <Button variant="outline" title="SignUp" onClick={handlLogout}>
+            <Button
+              className="min-w-15"
+              variant="outline"
+              title="SignUp"
+              onClick={handlLogout}
+            >
               <LogOut className="flex " />
-              <span className="flex">Sign Up</span>
+              <span className="lg:flex hidden">Sign Up</span>
             </Button>
           </div>
         </div>

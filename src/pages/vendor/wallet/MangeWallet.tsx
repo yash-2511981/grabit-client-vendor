@@ -1,5 +1,5 @@
 const ManageWallet = () => {
-  return <div></div>;
+  return <div className="h-screen app-background"></div>;
 };
 
 export default ManageWallet;

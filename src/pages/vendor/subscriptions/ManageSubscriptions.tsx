@@ -17,7 +17,7 @@ const subscriptionServices: service[] = [
 ];
 
 const ManageSubscriptions = () => {
-  const [openServie, setOpenServie] = useState("view");
+  const [openServie, setOpenServie] = useState("addOrEditSubscriptions");
 
   return (
     <div className="h-full space-y-6 px-2 sm:p-4 flex flex-col overflow-x-hidden app-background">

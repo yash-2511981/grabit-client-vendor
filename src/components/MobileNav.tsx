@@ -66,18 +66,22 @@ const MobileNav = () => {
             </div>
             <p className="flex">{vendor?.email}</p>
             <div className="flex lex-row gap-2 items-center justify-center">
-              <Button
-                variant="primary"
-                title="Manage Profile"
-                onClick={() => navigate("/vendor/profile")}
-              >
-                <User className="flexn" />
-                <span className="flex">Manage</span>
-              </Button>
-              <Button variant="outline" title="SignUp" onClick={handlLogout}>
-                <LogOut className="flex" />
-                <span className="flex">Sign Up</span>
-              </Button>
+              <SheetClose asChild>
+                <Button
+                  variant="primary"
+                  title="Manage Profile"
+                  onClick={() => navigate("/vendor/profile")}
+                >
+                  <User className="flexn" />
+                  <span className="flex">Manage</span>
+                </Button>
+              </SheetClose>
+              <SheetClose>
+                <Button variant="outline" title="SignUp" onClick={handlLogout}>
+                  <LogOut className="flex" />
+                  <span className="flex">Sign Up</span>
+                </Button>
+              </SheetClose>
             </div>
           </div>
         </div>

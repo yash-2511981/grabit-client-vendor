@@ -1,30 +1,36 @@
-import ActionBar from "@/components/ActionBar";
-import type { service } from "@/types/types";
-import { PlusIcon, Subscript } from "lucide-react";
-import { useState } from "react";
-
-const subscriptionServices: service[] = [
-  { text: "Review", icon: Subscript, serviceName: "review" },
-  { text: "Edit", icon: PlusIcon, serviceName: "add" },
-];
+import Notifications from "./components/Notifications";
+import ViewOrEditBankDetails from "./components/ViewOrEditBankDetails";
+import ViewOrEditDocument from "./components/ViewOrEditDocument";
+import ViewOrEditProfile from "./components/ViewOrEditProfile";
+import Wallet from "./components/Wallet";
 
 const ManageProfile = () => {
-  const [openServie, setOpenServie] = useState("review");
-
   return (
-    <div className="h-full space-y-6 px-2 sm:p-4 flex flex-col overflow-x-hidden">
-      <div className="flex flex-col gap-2">
+    <div className="h-screen space-y-6 px-2 sm:p-4 flex flex-col overflow-x-hidden app-background">
+      <div className="flex flex-col gap-2  max-md:mt-14">
         <h1 className="text-3xl sm:text-4xl font-semibold">Profile Overview</h1>
-        <p className="text-muted-foreground">
-          Mange your buisness details here.
-        </p>
+        <p className="text-muted-foreground">Manage Your Buisness Details</p>
       </div>
-      <div className="sm:pt-4 flex">
-        <ActionBar
-          links={subscriptionServices}
-          setOpenService={setOpenServie}
-          openService={openServie}
-        />
+      <div className="overflow-y-auto hide-scrollbar mb-6 p-2">
+        <div className="flex flex-col gap-3">
+          <div className="grid lg:grid-cols-3 grid-cols-1 gap-3">
+            <div className="col-span-2">
+              <ViewOrEditProfile />
+            </div>
+            <div className="col-span-1">
+              <ViewOrEditDocument />
+            </div>
+          </div>
+          <div className="grid lg:grid-cols-3 grid-cols-1 gap-3">
+            <div className="grid md:grid-cols-2 grid-cols-1 gap-3 col-span-2">
+              <ViewOrEditBankDetails />
+              <Wallet />
+            </div>
+            <div className="">
+              <Notifications />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

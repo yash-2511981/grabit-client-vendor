@@ -4,6 +4,7 @@ export type Vendor = {
   email: string;
   contact: string;
   address: string;
+  restaurantImageUrlUrl: string;
 };
 
 export type ProductType = {

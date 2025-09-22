@@ -4,6 +4,8 @@ import type { StateCreator } from "zustand";
 export const vendorSlices: StateCreator<VendorSlices> = (set, get) => ({
   vendor: null,
   setVendor: (vendor: Vendor) => set({ vendor }),
+  open: undefined,
+  setOpen: (open) => set({ open }),
   products: [],
   setProducts: (products) => set({ products }),
   addNewProduct: (product) => {

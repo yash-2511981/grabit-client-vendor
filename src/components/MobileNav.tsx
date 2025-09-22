@@ -1,36 +1,20 @@
-import { LogOut, MenuIcon, User } from "lucide-react";
+import { MenuIcon } from "lucide-react";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
 import Logo from "./Logo";
 import SidebarLink from "./SidebarLink";
 import { sideBarLinks } from "@/lib/data";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from "./ui/button";
-import useVendorStore from "@/store/store";
-import useApi from "@/hooks/useApi";
-import { SIGN_OUT } from "@/lib/routes";
+import { useLocation } from "react-router-dom";
+import SidebarFooter from "./SidebarFooter";
 
 const MobileNav = () => {
   const params = useLocation();
-  const { vendor, logout } = useVendorStore();
-  const navigate = useNavigate();
-  const { get } = useApi();
 
-  const handlLogout = async () => {
-    try {
-      const response = await get(SIGN_OUT);
-      if (response?.success) {
-        logout();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
   return (
     <Sheet>
       <SheetTrigger>
         <MenuIcon />
       </SheetTrigger>
-      <SheetContent side="left" className="w-[250px] h-screen app-background">
+      <SheetContent side="left" className="w-[220px] h-screen app-background">
         <Logo />
 
         <div className="flex flex-col justify-between h-[calc(100vh-80px)]">
@@ -59,31 +43,7 @@ const MobileNav = () => {
               })}
             </div>
           </div>
-
-          <div className="flex flex-col px-4 py-3 gap-2 items-center">
-            <div className="border border-amber-400 bg-amber-100 p-6 rounded-full flex  items-center justify-centerw-20">
-              <User size={40} className="text-amber-600" />
-            </div>
-            <p className="flex">{vendor?.email}</p>
-            <div className="flex lex-row gap-2 items-center justify-center">
-              <SheetClose asChild>
-                <Button
-                  variant="primary"
-                  title="Manage Profile"
-                  onClick={() => navigate("/vendor/profile")}
-                >
-                  <User className="flexn" />
-                  <span className="flex">Manage</span>
-                </Button>
-              </SheetClose>
-              <SheetClose>
-                <Button variant="outline" title="SignUp" onClick={handlLogout}>
-                  <LogOut className="flex" />
-                  <span className="flex">Sign Up</span>
-                </Button>
-              </SheetClose>
-            </div>
-          </div>
+          <SidebarFooter />
         </div>
       </SheetContent>
     </Sheet>

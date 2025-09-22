@@ -21,6 +21,8 @@ export type ProductType = {
 export type VendorSlices = {
   vendor: Vendor | null;
   setVendor: (admin: Vendor) => void;
+  open: boolean | undefined;
+  setOpen: (open: boolean) => void;
   products: ProductType[];
   setProducts: (products: ProductType[]) => void;
   addNewProduct: (product: ProductType) => void;

@@ -4,6 +4,7 @@ import {
   LayoutDashboard,
   ListOrderedIcon,
   StoreIcon,
+  UserCircle,
   Wallet,
 } from "lucide-react";
 
@@ -17,4 +18,5 @@ export const sideBarLinks: sidebarlink[] = [
     navigate: "/vendor/subscriptions",
   },
   { text: "Wallet", icon: Wallet, navigate: "/vendor/wallet" },
+  { text: "Profile", icon: UserCircle, navigate: "/vendor/profile" },
 ];

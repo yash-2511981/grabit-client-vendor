@@ -1,8 +1,8 @@
+import AccountSettings from "./components/AccountSettings";
 import Notifications from "./components/Notifications";
 import ViewOrEditBankDetails from "./components/ViewOrEditBankDetails";
 import ViewOrEditDocument from "./components/ViewOrEditDocument";
 import ViewOrEditProfile from "./components/ViewOrEditProfile";
-import Wallet from "./components/Wallet";
 
 const ManageProfile = () => {
   return (
@@ -24,7 +24,7 @@ const ManageProfile = () => {
           <div className="grid lg:grid-cols-3 grid-cols-1 gap-3">
             <div className="grid md:grid-cols-2 grid-cols-1 gap-3 col-span-2">
               <ViewOrEditBankDetails />
-              <Wallet />
+              <AccountSettings />
             </div>
             <div className="">
               <Notifications />

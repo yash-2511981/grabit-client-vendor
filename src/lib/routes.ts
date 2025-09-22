@@ -11,3 +11,4 @@ export const GET_ALL_PRODUCTS = `${AUTH_ROUTES}/get-all-products`;
 export const ADD_PRODUCT = `${AUTH_ROUTES}/add-product`;
 export const UPDATE_PRODUCT = `${AUTH_ROUTES}/update-product`;
 export const DELETE_PRODUCT = `${AUTH_ROUTES}/delete-product`;
+export const UPDATE_STATUS = `${AUTH_ROUTES}/update-restaurant-status`;

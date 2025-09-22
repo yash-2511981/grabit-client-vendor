@@ -83,7 +83,7 @@ const Dashboard = () => {
           Track your sales, revenue, and overall store performance at a glance.
         </p>
       </div>
-      <div className="overflow-y-auto hide-scrollbar mb-6">
+      <div className="overflow-y-auto hide-scrollbar mb-6 lg:mb-0">
         <div className="sm:pt-4 flex flex-col gap-3">
           <QuickStats />
           <div className="grid xl:grid-cols-3 grid-cols-1 gap-3">

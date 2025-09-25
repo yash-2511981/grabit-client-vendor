@@ -2,14 +2,14 @@ import { z } from "zod";
 
 //only chars and space are allowed validation
 const onlyCharsSpace = z
-  .string()
+  .string({ error: "invalid input" })
   .min(1, { error: "required" })
   .regex(/^[A-Za-z\s]+$/, { error: "only characters and spaces" });
 
 //only numbers are allowed
 const onlyNumbers = z
   .string({ error: "required" })
-  .regex(/^[0-9]+$/, { error: "only numbers are allowed" });
+  .regex(/^[0-9]+$/, { error: "invalid input" });
 
 //only numbers and chars no space
 const onlyNumbersAndChars = z
@@ -100,19 +100,22 @@ export type addOrEditSubscriptionType = z.infer<
 //profile page forms schemas
 export const viewOrEditPersonalDetailsSchema = z.object({
   name: onlyCharsSpace,
-  email: z.email({ error: "Enter valid email address" }),
+  email: z.email({ error: "invalid email" }),
   address: z
-    .string()
-    .min(60, { error: "there should be atleast 40 chararcters" }),
+    .string({ error: "invalid input" })
+    .min(40, {
+      error: "There should be at least 40 characters",
+    })
+    .regex(/^[A-Za-z\s0-9,]+$/, { error: "no special chars are allowed" }),
   category: z.enum(["veg", "non-veg", "both"]),
   phone: z
     .string()
     .length(10, { error: "Enter valid mobile number" })
     .regex(/^[0-9]+$/, { error: "Phone must contain only digits" }),
-  pincode: z
-    .string()
-    .length(6, { error: "Enter valid pincode" })
-    .regex(/^[0-9]+$/, { error: "Pincode should only contains digits" }),
+  pincode: onlyNumbers.length(6, { error: "invalid" }),
+  ownerName: onlyCharsSpace.max(30, { error: "max 30 chars" }),
+  ownerEmail: z.email({ error: "invalid email" }),
+  ownerContact: onlyNumbers.length(10, { error: "invalid" }),
 });
 
 export type ViewOrEditPersonalDetailsSchema = z.infer<

@@ -24,10 +24,10 @@ const ManageProfile = () => {
           <div className="grid lg:grid-cols-3 grid-cols-1 gap-3">
             <div className="grid md:grid-cols-2 grid-cols-1 gap-3 col-span-2">
               <ViewOrEditBankDetails />
-              <AccountSettings />
-            </div>
-            <div className="">
               <Notifications />
+            </div>
+            <div className="col-span-1">
+              <AccountSettings />
             </div>
           </div>
         </div>

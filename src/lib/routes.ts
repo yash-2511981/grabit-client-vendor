@@ -12,3 +12,5 @@ export const ADD_PRODUCT = `${AUTH_ROUTES}/add-product`;
 export const UPDATE_PRODUCT = `${AUTH_ROUTES}/update-product`;
 export const DELETE_PRODUCT = `${AUTH_ROUTES}/delete-product`;
 export const UPDATE_STATUS = `${AUTH_ROUTES}/update-restaurant-status`;
+export const UPDATE_PERSONAL_DETAILS = `${AUTH_ROUTES}/update-restaurant-details`;
+export const ADD_RESTAURANT_IMAGE = `${AUTH_ROUTES}/add-restaurant-image`;

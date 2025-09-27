@@ -24,9 +24,21 @@ export type ProductType = {
   rating: number;
 };
 
+export type BankDetailsType = {
+  _id: string | undefined;
+  partnerId: string | undefined;
+  bankName: string | undefined;
+  branchName: string | undefined;
+  accountHolderName: string | undefined;
+  accountNo: string | undefined;
+  ifscCode: string | undefined;
+};
+
 export type VendorSlices = {
   vendor: Vendor | null;
   setVendor: (admin: Vendor) => void;
+  bankDetails: BankDetailsType | null;
+  setBankDetails: (details: BankDetailsType) => void;
   open: boolean | undefined;
   setOpen: (open: boolean) => void;
   products: ProductType[];

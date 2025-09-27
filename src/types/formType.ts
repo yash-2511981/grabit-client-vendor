@@ -12,9 +12,9 @@ const onlyNumbers = z
   .regex(/^[0-9]+$/, { error: "invalid input" });
 
 //only numbers and chars no space
-const onlyNumbersAndChars = z
-  .string({ error: "invalid value" })
-  .regex(/^[A-Z0-9]+$/, { error: "invalid value" });
+// const onlyNumbersAndChars = z
+//   .string({ error: "invalid value" })
+//   .regex(/^[A-Z0-9]+$/, { error: "invalid value" });
 
 //image validation
 export const imageValidation = z
@@ -133,10 +133,14 @@ export type PersonalDocumentsFileSchema = z.infer<
 >;
 
 export const bankDetailsFormSchema = z.object({
+  _id: z.string().optional(),
   bankName: onlyCharsSpace,
+  branchName: z.string({ error: "invalid valueF" }),
   accountHolderName: onlyCharsSpace,
   accountNo: onlyNumbers,
-  ifscCode: onlyNumbersAndChars,
+  ifscCode: z
+    .string({ error: "invalid input" })
+    .regex(/^[A-Z]{4}0[A-Z0-9]{6}$/, "Invalid IFSC code"),
 });
 
 export type BankDetailsFormSchema = z.infer<typeof bankDetailsFormSchema>;

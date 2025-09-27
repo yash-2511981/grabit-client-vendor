@@ -33,14 +33,15 @@ import {
   type ViewOrEditPersonalDetailsSchema,
 } from "@/types/formType";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EditIcon, VerifiedIcon } from "lucide-react";
+import { EditIcon, Save, VerifiedIcon, X } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 const ViewOrEditProfile = () => {
   const { vendor, setVendor } = useVendorStore();
-  const [isEditing, setIsEditting] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { patch } = useApi();
 
   const form = useForm<ViewOrEditPersonalDetailsSchema>({
@@ -59,7 +60,7 @@ const ViewOrEditProfile = () => {
   });
 
   const updateDetails = async (data: ViewOrEditPersonalDetailsSchema) => {
-    setIsEditting(!isEditing);
+    setIsLoading(true);
 
     const vendorDataForComparison = {
       name: vendor?.name,
@@ -73,10 +74,14 @@ const ViewOrEditProfile = () => {
       ownerContact: vendor?.ownerContact,
     };
 
+    // Check if there are any changes
     if (JSON.stringify(data) === JSON.stringify(vendorDataForComparison)) {
-      toast.info("There is no change in personal details");
+      toast.info("No changes detected");
+      setIsEditing(false);
+      setIsLoading(false);
       return;
     }
+
     const result = await patch(
       UPDATE_PERSONAL_DETAILS,
       data,
@@ -85,11 +90,19 @@ const ViewOrEditProfile = () => {
 
     if (result?.success) {
       setVendor(result.data.restaurant);
+      setIsEditing(false);
+      toast.success("Profile updated successfully!");
     }
   };
 
+  const handleCancel = () => {
+    setIsEditing(false);
+    form.reset(); // Reset to original values
+    form.clearErrors(); // Clear any validation errors
+  };
+
   return (
-    <Card>
+    <Card className="card-amber-gradient">
       <CardHeader>
         <div className="flex gap-3 items-center">
           <RestaurantImage />
@@ -108,28 +121,51 @@ const ViewOrEditProfile = () => {
         </div>
         <CardAction>
           {isEditing ? (
-            <Button
-              className=""
-              variant="primary"
-              onClick={form.handleSubmit(updateDetails)}
-            >
-              Update
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleCancel}
+                disabled={isLoading}
+                className="flex items-center gap-1"
+              >
+                <X size={16} />
+                Cancel
+              </Button>
+              <Button
+                size="sm"
+                variant="primary"
+                onClick={form.handleSubmit(updateDetails)}
+                disabled={isLoading}
+                className="flex items-center gap-1"
+              >
+                <Save size={16} />
+                {isLoading ? "Saving..." : "Save Changes"}
+              </Button>
+            </div>
           ) : (
-            <EditIcon onClick={() => setIsEditting(!isEditing)} />
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setIsEditing(true)}
+              className="flex items-center gap-1"
+            >
+              <EditIcon size={16} />
+              Edit Profile
+            </Button>
           )}
         </CardAction>
       </CardHeader>
       <CardContent className="flex flex-col">
         <Form {...form}>
           <form className="space-y-3">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
+            <div className="grid grid-cols-1  sm:grid-cols-3 gap-2">
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="flex gap-3">
+                    <div className="flex justify-between items-center">
                       <FormLabel>Restaurant Name</FormLabel>
                       <FormMessage className="text-xs" />
                     </div>
@@ -144,7 +180,7 @@ const ViewOrEditProfile = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="flex gap-3">
+                    <div className="flex justify-between items-center">
                       <FormLabel>Restaurant email</FormLabel>
                       <FormMessage className="text-xs" />
                     </div>
@@ -176,7 +212,7 @@ const ViewOrEditProfile = () => {
                 name="ownerEmail"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="flex gap-3">
+                    <div className="flex justify-between items-center">
                       <FormLabel>Owner Email</FormLabel>
                       <FormMessage className="text-xs" />
                     </div>
@@ -206,7 +242,7 @@ const ViewOrEditProfile = () => {
                 name="ownerName"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="flex gap-3 items-center">
+                    <div className="flex justify-between items-center">
                       <FormLabel>Owner Name</FormLabel>
                       <FormMessage className="text-xs" />
                     </div>
@@ -250,7 +286,7 @@ const ViewOrEditProfile = () => {
                   name="pincode"
                   render={({ field }) => (
                     <FormItem>
-                      <div className="flex gap-3 items-center">
+                      <div className="flex justify-between items-center">
                         <FormLabel>Pincode</FormLabel>
                         <FormMessage />
                       </div>
@@ -268,7 +304,7 @@ const ViewOrEditProfile = () => {
                   name="address"
                   render={({ field }) => (
                     <FormItem className="h-full flex flex-col">
-                      <div className="flex gap-3 items-center">
+                      <div className="flex justify-between items-center">
                         <FormLabel>Address</FormLabel>
                         <FormMessage />
                       </div>

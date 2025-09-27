@@ -87,7 +87,7 @@ const Dashboard = () => {
         <div className="sm:pt-4 flex flex-col gap-3">
           <QuickStats />
           <div className="grid xl:grid-cols-3 grid-cols-1 gap-3">
-            <div className="lg:col-span-2 grid md:grid-cols-2  grid-cols-1 gap-3">
+            <div className="lg:col-span-2 grid lg:grid-cols-2  grid-cols-1 gap-3">
               <DashboardOVerviewCard
                 cardTitle="Buisness Overview"
                 cardDescription="This month's performance"

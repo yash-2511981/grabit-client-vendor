@@ -119,6 +119,18 @@
   }
 }
 
+@layer components {
+  .card-amber-gradient {
+    border: 1px solid #fcd34d; /* amber-200 */
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); /* shadow-sm */
+    background-image: linear-gradient(
+      to bottom right,
+      #fffbeb,
+      #fff7ed
+    ); 
+  }
+}
+
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }

@@ -122,26 +122,36 @@ const AddOrEditProduct = ({
 
   return (
     <div className="p-4 relative">
-      <Card className="p-4">
-        <CardHeader>
-          <CardTitle className="text-xl">
-            {!editProduct?.name ? "Add Prodcut" : `Edit ${editProduct.name}`}
+      <Card className="card-amber-gradient shadow-sm border-amber-200">
+        <CardHeader className="border-b border-amber-200/50">
+          <CardTitle className="text-xl flex items-center gap-3 text-gray-800">
+            {!editProduct?.name ? "Add Product" : `Edit ${editProduct.name}`}
           </CardTitle>
-          <CardDescription></CardDescription>
+          <CardDescription className="text-amber-700/70">
+            {!editProduct?.name
+              ? "Create a new product for your restaurant"
+              : "Update your product details"}
+          </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
               {/* Name, Price, Category */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Name</FormLabel>
+                      <FormLabel className="text-gray-700 font-medium">
+                        Name
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter product name" {...field} />
+                        <Input
+                          placeholder="Enter product name"
+                          {...field}
+                          className="border-amber-200 focus:border-amber-400 focus:ring-amber-200"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -153,7 +163,9 @@ const AddOrEditProduct = ({
                   name="price"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Price</FormLabel>
+                      <FormLabel className="text-gray-700 font-medium">
+                        Price
+                      </FormLabel>
                       <FormControl>
                         <Input
                           type="text"
@@ -161,8 +173,10 @@ const AddOrEditProduct = ({
                           value={field.value}
                           onChange={field.onChange}
                           name={field.name}
+                          className="border-amber-200 focus:border-amber-400 focus:ring-amber-200"
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -171,8 +185,10 @@ const AddOrEditProduct = ({
                   control={form.control}
                   name="category"
                   render={({ field }) => (
-                    <FormItem className="flex gap-4">
-                      <FormLabel>Choose Category</FormLabel>
+                    <FormItem className="space-y-3">
+                      <FormLabel className="text-gray-700 font-medium">
+                        Category
+                      </FormLabel>
                       <FormControl>
                         <RadioGroup
                           value={field.value}
@@ -180,12 +196,24 @@ const AddOrEditProduct = ({
                           className="flex gap-6"
                         >
                           <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="veg" id="veg" />
-                            <Label htmlFor="veg">Veg</Label>
+                            <RadioGroupItem
+                              value="veg"
+                              id="veg"
+                              className="text-amber-600 border-amber-300"
+                            />
+                            <Label htmlFor="veg" className="text-gray-700">
+                              Veg
+                            </Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="non-veg" id="non-veg" />
-                            <Label htmlFor="non-veg">Non Veg</Label>
+                            <RadioGroupItem
+                              value="non-veg"
+                              id="non-veg"
+                              className="text-amber-600 border-amber-300"
+                            />
+                            <Label htmlFor="non-veg" className="text-gray-700">
+                              Non Veg
+                            </Label>
                           </div>
                         </RadioGroup>
                       </FormControl>
@@ -195,17 +223,19 @@ const AddOrEditProduct = ({
                 />
               </div>
 
-              {/* Description */}
               <FormField
                 control={form.control}
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel className="text-gray-700 font-medium">
+                      Description
+                    </FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="Enter product description"
                         {...field}
+                        className="border-amber-200 focus:border-amber-400 focus:ring-amber-200 min-h-[100px]"
                       />
                     </FormControl>
                     <FormMessage />
@@ -213,24 +243,25 @@ const AddOrEditProduct = ({
                 )}
               />
 
-              {/* Image URL */}
               <FormField
                 control={form.control}
                 name="photo"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Image</FormLabel>
-                    <div className="flex gap-2 ">
+                    <FormLabel className="text-gray-700 font-medium">
+                      Product Image
+                    </FormLabel>
+                    <div className="flex gap-3">
                       <FormControl>
                         <Input
                           type="file"
-                          accept="image/"
+                          accept="image/*"
                           ref={(el) => {
                             inputRef.current = el;
                             field.ref(el);
                           }}
                           value={undefined}
-                          placeholder="https://example.com/image.jpg"
+                          placeholder="Choose product image"
                           onChange={async (e) => {
                             const file = e.target.files?.[0];
                             field.onChange(file);
@@ -241,6 +272,7 @@ const AddOrEditProduct = ({
                               }, 0);
                             }
                           }}
+                          className="border-amber-200 focus:border-amber-400 focus:ring-amber-200"
                         />
                       </FormControl>
                       <div className="flex gap-2">
@@ -251,15 +283,15 @@ const AddOrEditProduct = ({
                             onClick={() => {
                               setOpenImageWindow(true);
                             }}
+                            className="border-amber-300 text-amber-700 hover:bg-amber-50"
                           >
-                            <Eye />
+                            <Eye className="w-4 h-4" />
                           </Button>
                         )}
 
                         {form.getValues().photo && (
                           <Button
                             variant="outline"
-                            className="text-xs sm:text-sm"
                             type="button"
                             onClick={() => {
                               field.onChange(null);
@@ -267,8 +299,9 @@ const AddOrEditProduct = ({
                                 inputRef.current.value = "";
                               }
                             }}
+                            className="border-red-300 text-red-700 hover:bg-red-50"
                           >
-                            <X />
+                            <X className="w-4 h-4" />
                           </Button>
                         )}
                       </div>
@@ -279,7 +312,10 @@ const AddOrEditProduct = ({
               />
 
               {/* Submit Button */}
-              <Button type="submit" className="w-full" variant="primary">
+              <Button
+                type="submit"
+                className="w-full bg-amber-500 hover:bg-amber-600 text-white font-medium py-2"
+              >
                 {editProduct ? "Update Product" : "Add Product"}
               </Button>
             </form>

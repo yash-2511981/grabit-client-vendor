@@ -9,6 +9,7 @@ import ViewProducts from "../../../components/ViewProducts";
 import DialogBox from "@/components/DialogueBox";
 import useApi from "@/hooks/useApi";
 import { DELETE_PRODUCT } from "@/lib/routes";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const productsServices: service[] = [
   { text: "View Products", icon: StoreIcon, serviceName: "viewProduct" },
@@ -26,6 +27,7 @@ const ManageProduct = () => {
   const [openService, setOpenService] = useState<vendorservices>("viewProduct");
   const { post } = useApi();
   const [openDialogue, setOpenDialogue] = useState(false);
+
 
   const handleEditClick = () => {
     if (selectedProducts.length === 1) {
@@ -52,9 +54,11 @@ const ManageProduct = () => {
   return (
     <div className="h-screen space-y-6 px-2 sm:p-4 flex flex-col overflow-x-hidden app-background">
       <div className="flex flex-col gap-2 max-md:mt-14">
-        <h1 className="text-3xl sm:text-4xl font-semibold">Products</h1>
+        <h1 className="text-3xl sm:text-4xl font-semibold text-gray-800">
+          Products
+        </h1>
         <p className="text-muted-foreground">
-          Add,Review and Manage your products here.
+          Add, Review and Manage your products here.
         </p>
       </div>
       <div className="sm:pt-4 flex">
@@ -69,9 +73,14 @@ const ManageProduct = () => {
             disabled={
               selectedProducts.length !== 1 || openService === "addProduct"
             }
-            variant={openService === "editProduct" ? "primary" : "outline"}
+            variant={openService === "editProduct" ? "default" : "outline"}
+            className={
+              openService === "editProduct"
+                ? "bg-amber-500 hover:bg-amber-600 text-white"
+                : "border-amber-300 text-amber-700 hover:bg-amber-50"
+            }
           >
-            <Edit />
+            <Edit className="w-4 h-4" />
           </Button>
 
           <Button
@@ -79,9 +88,10 @@ const ManageProduct = () => {
               selectedProducts.length === 0 || openService === "addProduct"
             }
             variant="outline"
+            className="border-red-300 text-red-700 hover:bg-red-50 disabled:opacity-50"
             onClick={() => setOpenDialogue(true)}
           >
-            <Trash />
+            <Trash className="w-4 h-4" />
           </Button>
         </div>
       </div>
@@ -100,13 +110,12 @@ const ManageProduct = () => {
         )}
         {openService === "viewProduct" && <ViewProducts />}
       </div>
-      {openDialogue && (
-        <DialogBox
-          open={openDialogue}
-          setOpen={setOpenDialogue}
-          action={handleDeleteClick}
-        />
-      )}
+
+      <Dialog open={openDialogue} onOpenChange={setOpenDialogue}>
+        <DialogContent className="sm:max-w-md">
+          <DialogBox setOpen={setOpenDialogue} action={handleDeleteClick} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

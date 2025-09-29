@@ -1,7 +1,8 @@
 import useApi from "@/hooks/useApi";
 import { GET_ALL_PRODUCTS } from "@/lib/routes";
+import { cn } from "@/lib/utils";
 import useVendorStore from "@/store/store";
-import { Check } from "lucide-react";
+import { Check, Package } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const ViewProducts = () => {
@@ -35,7 +36,8 @@ const ViewProducts = () => {
     };
 
     getProducts();
-  }, [get, products.length, setProducts]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [products]);
 
   const isSelected = (id: string) => {
     return selectedProducts.includes(id);
@@ -44,9 +46,9 @@ const ViewProducts = () => {
   if (loading) {
     return (
       <div className="p-4 flex justify-center items-center min-h-[200px]">
-        <div className="flex items-center gap-2">
-          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-500"></div>
-          <span className="text-gray-600">Loading products...</span>
+        <div className="flex items-center gap-3">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
+          <span className="text-gray-600 font-medium">Loading products...</span>
         </div>
       </div>
     );
@@ -56,20 +58,26 @@ const ViewProducts = () => {
     return (
       <div className="p-4 flex justify-center items-center min-h-[200px]">
         <div className="text-center text-gray-500">
-          <div className="text-4xl mb-2">📦</div>
-          <p>No products found</p>
-          <p className="text-sm">Add some products to get started</p>
+          <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Package className="w-8 h-8 text-amber-500" />
+          </div>
+          <p className="text-lg font-medium text-gray-700 mb-1">
+            No products found
+          </p>
+          <p className="text-sm text-gray-500">
+            Add some products to get started
+          </p>
         </div>
       </div>
     );
   }
 
   const RenderStars = ({ rating }: { rating: number }) => {
-    return Array.from({ length: rating }, (_, index) => (
+    return Array.from({ length: 5 }, (_, index) => (
       <span
         key={index}
         className={`text-sm ${
-          index < Math.floor(rating) ? "text-yellow-400" : "text-gray-300"
+          index < Math.floor(rating) ? "text-amber-400" : "text-gray-300"
         }`}
       >
         ⭐
@@ -77,13 +85,40 @@ const ViewProducts = () => {
     ));
   };
 
+  const CategoryBadge = ({ category }: { category: string }) => {
+    return (
+      <div
+        className={cn(
+          "w-4 h-4 rounded-xs border-2 bg-white flex items-center justify-center shadow-sm",
+          "border-green-500",
+          { "border-red-500": category === "non-veg" }
+        )}
+      >
+        <div
+          className={cn("w-2 h-2 rounded-full bg-green-500", {
+            "bg-red-500": category === "non-veg",
+          })}
+        ></div>
+      </div>
+    );
+  };
+
   return (
     <div className="p-4 space-y-4">
       <div className="grid gap-4">
         {products.map((product) => (
           <div
-            className="bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow duration-200 overflow-hidden"
+            className={`border rounded-lg hover:shadow-md transition-all duration-200 overflow-hidden cursor-pointer ${
+              isSelected(product._id)
+                ? "bg-amber-50 border-amber-300 shadow-sm"
+                : "bg-white border-amber-200 hover:border-amber-300 hover:bg-amber-50/30"
+            }`}
             key={product._id}
+            onClick={() => {
+              void (isSelected(product._id)
+                ? deselectProduct(product._id)
+                : selectProduct(product._id));
+            }}
           >
             <div className="p-4 flex gap-4">
               {/* Product Image */}
@@ -91,54 +126,60 @@ const ViewProducts = () => {
                 <img
                   src={product.imageUrl}
                   alt={product.name}
-                  className="w-24 h-24 object-cover rounded-lg"
+                  className="w-24 h-24 object-cover rounded-lg border border-amber-200"
                 />
               </div>
 
               {/* Product Details */}
               <div className="flex-grow min-w-0">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-semibold text-lg text-gray-900 truncate">
+                <div className="flex items-center mb-2">
+                  <h3 className="font-semibold text-lg text-gray-900 truncate pr-2">
                     {product.name}
                   </h3>
+                  <CategoryBadge category={product.category} />
                 </div>
 
-                <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                <p className="text-gray-600 text-sm mb-3 line-clamp-2 leading-relaxed">
                   {product.description}
                 </p>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
                     {/* Price */}
-                    <span className="text-xl font-bold text-orange-600">
+                    <span className="text-xl font-bold text-amber-600">
                       ₹{product.price}
                     </span>
 
                     {/* Rating */}
                     <div className="flex items-center gap-1">
-                      <RenderStars rating={product.rating} />
+                      <RenderStars rating={product.rating || 0} />
                       <span className="text-sm text-gray-600 ml-1">
-                        {product.ratingCount}
+                        ({product.ratingCount || 0})
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
-              {/* Actions */}
-              <div className="flex gap-2 flex-col h-full justify-start">
-                {isSelected(product._id) ? (
-                  <div className="border rounded-xs border-amber-600 text-amber-600 ">
-                    <Check
-                      className="h-4 w-4"
-                      onClick={() => deselectProduct(product._id)}
-                    />
-                  </div>
-                ) : (
-                  <div
-                    className="p-2 border rounded-xs border-gray-400"
-                    onClick={() => selectProduct(product._id)}
-                  ></div>
-                )}
+
+              {/* Selection Checkbox */}
+              <div className="flex items-start pt-1">
+                <div
+                  className={`w-6 h-6 border-2 rounded flex items-center justify-center transition-all duration-200 ${
+                    isSelected(product._id)
+                      ? "border-amber-500 bg-amber-500"
+                      : "border-gray-300 hover:border-amber-400"
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    void (isSelected(product._id)
+                      ? deselectProduct(product._id)
+                      : selectProduct(product._id));
+                  }}
+                >
+                  {isSelected(product._id) && (
+                    <Check className="h-4 w-4 text-white" />
+                  )}
+                </div>
               </div>
             </div>
           </div>

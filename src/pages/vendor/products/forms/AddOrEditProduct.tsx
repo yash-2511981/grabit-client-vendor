@@ -24,12 +24,17 @@ import {
 } from "@/components/ui/card";
 import { useRef, useState } from "react";
 import { Eye, X } from "lucide-react";
-import { ADD_PRODUCT, UPDATE_PRODUCT } from "@/lib/routes";
-import apiCLient from "@/lib/axios-client";
+import {
+  ADD_PRODUCT,
+  GET_PRODUCT_IMG_UPLOAD_URL,
+  GET_UPDATE_PRODUCT_IMG_UPLOAD_URL,
+  UPDATE_PRODUCT,
+} from "@/lib/routes";
 import { toast } from "sonner";
 import type { vendorservices } from "@/types/types";
 import ShowUploadedImage from "@/components/showUploadedImage";
 import type { ProductType } from "@/types/vendor";
+import useApi from "@/hooks/useApi";
 
 const AddOrEditProduct = ({
   setOpenService,
@@ -38,9 +43,11 @@ const AddOrEditProduct = ({
   setOpenService: (service: vendorservices) => void;
   editProduct: ProductType | null;
 }) => {
-  const { addNewProduct, updateProduct } = useVendorStore();
+  const { addNewProduct, updateProducts, emptySelectedProduct } =
+    useVendorStore();
   const inputRef = useRef<HTMLInputElement>(null);
   const [openImageWindow, setOpenImageWindow] = useState(false);
+  const { post, patch } = useApi();
 
   const form = useForm<AddOrEditProductType>({
     resolver: zodResolver(addProductSchema),
@@ -52,61 +59,145 @@ const AddOrEditProduct = ({
     },
   });
 
-  const onSubmit = async (values: AddOrEditProductType) => {
-    const formData = new FormData();
+  const updateProduct = async (values: AddOrEditProductType) => {
+    if (!editProduct) return;
+
     try {
-      if (editProduct) {
-        if (editProduct.name !== values.name)
-          formData.append("name", values.name);
-        if (editProduct.price !== values.price)
-          formData.append("price", values.price);
-        if (editProduct.description !== values.description) {
-          formData.append("description", values.description);
-        }
-        if (editProduct.category !== values.category)
-          formData.append("category", values.category);
-        if (values.photo instanceof File) {
+      let isProductChanged = false;
+
+      // Check if basic product fields changed
+      if (
+        editProduct.name !== values.name ||
+        editProduct.price !== values.price ||
+        editProduct.description !== values.description ||
+        editProduct.category !== values.category
+      ) {
+        isProductChanged = true;
+      }
+
+      let imageUrl = editProduct.imageUrl;
+      let imageId;
+
+      // Handle image upload if a new file is provided
+      if (values.photo instanceof File) {
+        const result = await post(GET_UPDATE_PRODUCT_IMG_UPLOAD_URL, {
+          fileType: values.photo.type,
+          fileSize: values.photo.size,
+          _id: editProduct._id,
+        });
+
+        if (result?.success) {
+          const { uploadParams, uploadUrl } = result.data;
+
+          const formData = new FormData();
           formData.append("file", values.photo);
-        }
-        if ([...formData.entries()].length === 0) {
-          toast.info("No changes detected");
+
+          Object.entries(uploadParams).forEach(([key, value]) => {
+            formData.append(key, value as string);
+          });
+
+          const uploadResponse = await fetch(uploadUrl, {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!uploadResponse.ok) {
+            const errorText = await uploadResponse.text();
+            throw new Error(`Upload failed: ${errorText}`);
+          }
+
+          const cloudinaryData = await uploadResponse.json();
+          imageUrl = cloudinaryData.secure_url;
+          imageId = cloudinaryData.public_id;
+          isProductChanged = true;
+        } else {
+          toast.error("Failed to get upload URL");
           return;
         }
-        formData.append("_id", editProduct._id);
+      }
 
-        const result = await apiCLient.patch(UPDATE_PRODUCT, formData, {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+      if (isProductChanged) {
+        const result = await patch(
+          UPDATE_PRODUCT,
+          {
+            name: values.name,
+            price: values.price,
+            description: values.description,
+            category: values.category,
+            _id: editProduct._id,
+            imageUrl,
+            imageId,
+          },
+          "Product updated successfully"
+        );
 
-        if (result.status === 200) {
-          updateProduct(result.data.product);
-          toast.success("Product Updated");
-          setOpenService("viewProduct");
+        if (result?.success) {
+          updateProducts(result.data.product);
+        } else {
+          toast.error("Failed to update product");
         }
       } else {
-        formData.append("name", values.name);
-        formData.append("price", values.price);
-        formData.append("description", values.description);
-        formData.append("category", values.category);
-        if (values.photo instanceof File) {
-          formData.append("file", values.photo);
+        toast.info("No changes detected");
+      }
+      emptySelectedProduct();
+      setOpenService("viewProduct");
+    } catch (error) {
+      console.error("Error updating product:", error);
+    }
+  };
+
+  const addProduct = async (values: AddOrEditProductType) => {
+    try {
+      const uploadUrlResult = await post(GET_PRODUCT_IMG_UPLOAD_URL, {
+        fileType: values.photo.type,
+        fileSize: values.photo.size,
+      });
+      console.log(uploadUrlResult);
+      if (uploadUrlResult?.success) {
+        const { uploadParams, uploadUrl } = uploadUrlResult.data;
+
+        const formData = new FormData();
+        Object.entries(uploadParams).forEach(([key, value]) => {
+          formData.append(key, value as string);
+        });
+        formData.append("file", values.photo);
+        const uplodaResponse = await fetch(uploadUrl, {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!uplodaResponse.ok) {
+          toast.error("Failed to upload product");
+          return;
         }
 
-        const result = await apiCLient.post(ADD_PRODUCT, formData, {
-          withCredentials: true,
-          headers: { "Content-Type": "multipart/form-data" },
-        });
-        if (result.status === 200) {
+        const { secure_url, public_id } = await uplodaResponse.json();
+
+        const result = await post(
+          ADD_PRODUCT,
+          {
+            ...values,
+            imageUrl: secure_url,
+            imageId: public_id,
+          },
+          "Product created successfully"
+        );
+
+        if (result?.success) {
           addNewProduct(result.data.product);
-          toast.success("Product Created");
-          setOpenService("viewProduct");
-        } else {
-          toast.success("failed while creation");
         }
       }
+      setOpenService("viewProduct");
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const onSubmit = async (values: AddOrEditProductType) => {
+    if (editProduct) {
+      await updateProduct(values);
+    } else {
+      await addProduct(values);
     }
   };
 
@@ -121,7 +212,7 @@ const AddOrEditProduct = ({
   };
 
   return (
-    <div className="p-4 relative">
+    <div className="p-4">
       <Card className="card-amber-gradient shadow-sm border-amber-200">
         <CardHeader className="border-b border-amber-200/50">
           <CardTitle className="text-xl flex items-center gap-3 text-gray-800">
@@ -136,7 +227,6 @@ const AddOrEditProduct = ({
         <CardContent className="">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-              {/* Name, Price, Category */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <FormField
                   control={form.control}

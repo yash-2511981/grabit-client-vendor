@@ -17,9 +17,9 @@ const ViewProducts = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const getProducts = async () => {
-      if (products.length > 0) return;
+    if (products.length > 0) return;
 
+    const getProducts = async () => {
       setLoading(true);
 
       try {
@@ -36,7 +36,7 @@ const ViewProducts = () => {
     };
 
     getProducts();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products]);
 
   const isSelected = (id: string) => {

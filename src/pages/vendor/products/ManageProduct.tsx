@@ -28,7 +28,6 @@ const ManageProduct = () => {
   const { post } = useApi();
   const [openDialogue, setOpenDialogue] = useState(false);
 
-
   const handleEditClick = () => {
     if (selectedProducts.length === 1) {
       setEditProduct(selectedProducts[0]);
@@ -42,7 +41,7 @@ const ManageProduct = () => {
       DELETE_PRODUCT,
       { selectedProducts: [...selectedProducts] },
       `${selectedProducts.length} Product${
-        selectedProducts.length > 1 && "s"
+        selectedProducts.length > 1 ? "s" : ""
       } deleted successfully `
     );
 

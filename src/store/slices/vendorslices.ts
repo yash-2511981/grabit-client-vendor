@@ -19,7 +19,7 @@ export const vendorSlices: StateCreator<VendorSlices> = (set, get) => ({
     const newProducts = [...products];
     set({ products: newProducts });
   },
-  updateProduct: (product) => {
+  updateProducts: (product) => {
     const products = [...get().products];
     const index = products.findIndex((p) => p._id === product._id);
 
@@ -37,6 +37,7 @@ export const vendorSlices: StateCreator<VendorSlices> = (set, get) => ({
     });
   },
   selectedProducts: [],
+  emptySelectedProduct: () => set({ selectedProducts: [] }),
   selectProduct: (product) => {
     const selectedProducts = [...get().selectedProducts, product];
     set({ selectedProducts });

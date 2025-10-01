@@ -67,9 +67,10 @@ export type VendorSlices = {
   open: boolean | undefined;
   setOpen: (open: boolean) => void;
   products: ProductType[];
+  emptySelectedProduct: () => void;
   setProducts: (products: ProductType[]) => void;
   addNewProduct: (product: ProductType) => void;
-  updateProduct: (product: ProductType) => void;
+  updateProducts: (product: ProductType) => void;
   deleteProducts: () => void;
   selectedProducts: string[];
   selectProduct: (product: string) => void;

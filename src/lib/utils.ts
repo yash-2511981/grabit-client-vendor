@@ -44,3 +44,32 @@ export const buttonVariants = cva(
   }
 );
 
+export const getFormatedDate = (date: Date): string => {
+  const now = new Date();
+
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const targetDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+  const dayDiff =
+    (today.getTime() - targetDate.getTime()) / (1000 * 60 * 60 * 24);
+
+  const timeStr = date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  if (dayDiff === 0) return timeStr;
+  if (dayDiff === 1) return `Yesterday, ${timeStr}`;
+
+  return date.toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+};

@@ -1,5 +1,5 @@
-import apiCLient from "@/lib/axios-client";
-import { ADD_RESTAURANT_IMAGE } from "@/lib/routes";
+import useApi from "@/hooks/useApi";
+import { ADD_RESTAURANT_IMAGE, SAVE_RESTAURANT_IMG } from "@/lib/routes";
 import useVendorStore from "@/store/store";
 import { imageValidation } from "@/types/formType";
 import { Edit, User2 } from "lucide-react";
@@ -9,27 +9,58 @@ import { ZodError } from "zod";
 
 const RestaurantImage = () => {
   const { vendor, setVendor } = useVendorStore();
+  const { post } = useApi();
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formData = new FormData();
-
     try {
       const file = e.target.files?.[0];
       imageValidation.parse(file);
 
-      if (file) {
-        formData.append("file", file);
+      if (!file) {
+        return;
       }
 
-      const response = await apiCLient.post(ADD_RESTAURANT_IMAGE, formData, {
-        withCredentials: true,
-        headers: { "Content-Type": "multipart/form-data" },
+      const result = await post(ADD_RESTAURANT_IMAGE, {
+        fileType: file?.type,
+        fileSize: file?.size,
       });
 
-      if (response.status === 200) {
-        toast.success("Image Updated Successfully");
-        setVendor(response.data.restaurant);
+      if (!result?.success) {
+        toast.error("Failed to upload the image");
+        return;
       }
+
+      const { uploadParams, uploadUrl } = result.data;
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      Object.entries(uploadParams).forEach(([key, value]) => {
+        formData.append(key, value as string);
+      });
+
+      const uploadResponse = await fetch(uploadUrl, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const cloudinaryData = await uploadResponse.json();
+
+      const saveResult = await post(SAVE_RESTAURANT_IMG, {
+        imgUrl: cloudinaryData.secure_url,
+        publicId: cloudinaryData.public_id,
+      });
+
+      console.log(saveResult);
+      if (saveResult?.success) {
+        toast.success("Image Uploaded Successfully");
+        setVendor(saveResult.data.restaurant);
+      }
+      console.log(vendor);
     } catch (err) {
       console.log(err);
       if (err instanceof ZodError) {
@@ -48,7 +79,7 @@ const RestaurantImage = () => {
         />
       ) : (
         <label className="cursor-pointer">
-          <div className="w-15 h-15 bg-amber-200 rounded-full text-amber-600 flex items-center justify-center group relative overflow-hidden">
+          <div className="w-16 h-16 bg-amber-200 rounded-full text-amber-600 flex items-center justify-center group relative overflow-hidden">
             <User2 size={35} className="opacity-100" />
           </div>
         </label>

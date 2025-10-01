@@ -15,6 +15,8 @@ export const UPDATE_PRODUCT = `${AUTH_ROUTES}/update-product`;
 export const DELETE_PRODUCT = `${AUTH_ROUTES}/delete-product`;
 export const UPDATE_STATUS = `${AUTH_ROUTES}/update-restaurant-status`;
 export const UPDATE_PERSONAL_DETAILS = `${AUTH_ROUTES}/update-restaurant-details`;
-export const ADD_RESTAURANT_IMAGE = `${AUTH_ROUTES}/add-restaurant-image`;
+// export const ADD_RESTAURANT_IMAGE = `${AUTH_ROUTES}/add-restaurant-image`;
+export const ADD_RESTAURANT_IMAGE = `${AUTH_ROUTES}/get-upload-url-restaurnat-img`;
+export const SAVE_RESTAURANT_IMG = `${AUTH_ROUTES}/save-restaurant-img`;
 
 export const ADD_BANK_DETAILS = `${AUTH_ROUTES}/add-bank-details`;

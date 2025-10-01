@@ -1,3 +1,4 @@
+import { mockNotifications } from "@/lib/data";
 import type { Vendor, VendorSlices } from "src/types/vendor";
 import type { StateCreator } from "zustand";
 
@@ -6,6 +7,8 @@ export const vendorSlices: StateCreator<VendorSlices> = (set, get) => ({
   setVendor: (vendor: Vendor) => set({ vendor }),
   bankDetails: null,
   setBankDetails: (bankDetails) => set({ bankDetails }),
+  documents: null,
+  setVendorDocuments: (documents) => set({ ...get().documents, documents }),
   open: undefined,
   setOpen: (open) => set({ open }),
   products: [],
@@ -48,6 +51,13 @@ export const vendorSlices: StateCreator<VendorSlices> = (set, get) => ({
     const editProduct = get().products.find((p) => p._id === id);
 
     set({ editProduct });
+  },
+  notifications: mockNotifications,
+  setNotifications: (notifications) => set({ notifications }),
+  addNotifications: (notification) => {
+    const notifications = [...get().notifications];
+    notifications.unshift(notification);
+    set({ notifications });
   },
   logout: () =>
     set({

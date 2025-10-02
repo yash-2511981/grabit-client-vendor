@@ -50,7 +50,6 @@ export const vendorSlices: StateCreator<VendorSlices> = (set, get) => ({
   editProduct: null,
   setEditProduct: (id) => {
     const editProduct = get().products.find((p) => p._id === id);
-
     set({ editProduct });
   },
   notifications: mockNotifications,

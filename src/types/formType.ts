@@ -28,6 +28,19 @@ export const imageValidation = z
     { error: "maximum file size should be 2MB" }
   );
 
+//pdf validations
+export const fileValidations = z
+  .custom<File>()
+  .refine((file) => !file || file instanceof File, {
+    message: "File is required",
+  })
+  .refine((file) => !file || file.type === "application/pdf", {
+    message: "Only PDF files are allowed",
+  })
+  .refine((file) => !file || file.size <= 1024 * 1024, {
+    message: "Maximum file size should be 1MB",
+  });
+
 //login form schema
 export const loginFormSchema = z.object({
   email: z.email({ error: "Email is required" }),
@@ -122,15 +135,14 @@ export type ViewOrEditPersonalDetailsSchema = z.infer<
   typeof viewOrEditPersonalDetailsSchema
 >;
 
-export const personalDocumentsFileSchema = z.object({
-  foodLicensUrl: imageValidation,
-  adharCardUrl: imageValidation,
-  panCardUrl: imageValidation,
+//personal document model schemas
+export const foodLicensModalSchema = z.object({
+  foodLicens: fileValidations,
+  foodLicensIssueDate: z.string().min(1, { error: "invalid date" }),
+  foodLicensExpiryDate: z.string().min(1, { error: "invalid date" }),
 });
 
-export type PersonalDocumentsFileSchema = z.infer<
-  typeof personalDocumentsFileSchema
->;
+export type FoodLicensModelType = z.infer<typeof foodLicensModalSchema>;
 
 export const bankDetailsFormSchema = z.object({
   _id: z.string().optional(),

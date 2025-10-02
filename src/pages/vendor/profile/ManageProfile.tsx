@@ -11,7 +11,7 @@ const ManageProfile = () => {
         <h1 className="text-3xl sm:text-4xl font-semibold">Profile Overview</h1>
         <p className="text-muted-foreground">Manage Your Buisness Details</p>
       </div>
-      <div className="overflow-y-auto hide-scrollbar mb-6 p-2">
+      <div className="overflow-y-auto hide-scrollbar p-2">
         <div className="flex flex-col gap-3">
           <div className="grid lg:grid-cols-3 grid-cols-1 gap-3">
             <div className="col-span-2">

@@ -29,3 +29,12 @@ export const SAVE_RESTAURANT_IMG = `${AUTH_ROUTES}/save-restaurant-img`;
 
 //adding and updating bank details
 export const ADD_BANK_DETAILS = `${AUTH_ROUTES}/add-bank-details`;
+
+//document upload end points
+export const GET_URL_FOR_PRIVATE_DOC = `${AUTH_ROUTES}/get-upload-url-vendor-doc`;
+
+export const UPLOAD_FOOD_LICENSE = `${AUTH_ROUTES}/upload-food-license`;
+export const UPLOAD_AADHAR = `${AUTH_ROUTES}/add-bank-details`;
+export const UPLOAD_PAN = `${AUTH_ROUTES}/add-bank-details`;
+
+//get signed url for private docs

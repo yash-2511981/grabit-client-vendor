@@ -1,4 +1,11 @@
-import { CalendarIcon, UploadIcon, X } from "lucide-react";
+import {
+  CalendarIcon,
+  ReplaceIcon,
+  UploadIcon,
+  X,
+  FileText,
+  AlertCircle,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -6,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
 } from "./ui/dialog";
 import { useForm } from "react-hook-form";
 import {
@@ -33,10 +41,6 @@ import { toast } from "sonner";
 import useVendorStore from "@/store/store";
 
 const UploadFoodLicensModal = () => {
-  const fileRef = useRef<HTMLInputElement>(null);
-  const { setVendorDocuments } = useVendorStore();
-  const [open, setOpen] = useState(false);
-  const { post } = useApi();
   const form = useForm<FoodLicensModelType>({
     resolver: zodResolver(foodLicensModalSchema),
     defaultValues: {
@@ -46,14 +50,29 @@ const UploadFoodLicensModal = () => {
     },
   });
 
+  const fileRef = useRef<HTMLInputElement>(null);
+  const { setVendorDocuments, vendor } = useVendorStore();
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { post } = useApi();
+
+  const selectedFile = form.watch("foodLicens");
+
+  //onsubmit handler
   const onSubmit = async (data: FoodLicensModelType) => {
+    setLoading(true);
+    if (!data.foodLicens) return;
+
     const uploadUrlResult = await post(GET_URL_FOR_PRIVATE_DOC, {
       fileType: data.foodLicens.type,
       fileSize: data.foodLicens.size,
     });
 
     console.log(uploadUrlResult);
-    if (!uploadUrlResult?.success) return toast.error("Failed upload");
+    if (!uploadUrlResult?.success) {
+      setLoading(false);
+      return toast.error("Failed upload");
+    }
 
     const formData = new FormData();
     const { uploadParams, uploadUrl } = uploadUrlResult.data;
@@ -65,19 +84,27 @@ const UploadFoodLicensModal = () => {
     formData.append("type", uploadParams.type);
     formData.append("resource_type", uploadParams.resource_type);
 
-    // File MUST be last
     formData.append("file", data.foodLicens);
 
     const cloudinaryResult = await fetch(uploadUrl, {
       method: "POST",
       body: formData,
     });
-
-    if (!cloudinaryResult.ok) toast.error("Failed to upload file");
+    console.log(cloudinaryResult);
+    if (!cloudinaryResult.ok) {
+      toast.error("Failed to upload file");
+      setLoading(false);
+      setOpen(false);
+      return;
+    }
 
     const result = await post(
       UPLOAD_FOOD_LICENSE,
-      { ...data, foodLicensPublicId: uploadParams.public_id },
+      {
+        foodLicensIssueDate: data.foodLicensIssueDate,
+        foodLicensExpiryDate: data.foodLicensExpiryDate,
+        foodLicensPublicId: uploadParams.public_id,
+      },
       "File Uploaded successfully"
     );
     console.log(result);
@@ -88,150 +115,221 @@ const UploadFoodLicensModal = () => {
     if (fileRef.current?.value) {
       fileRef.current.value = "";
     }
+    setLoading(false);
     setOpen(false);
+  };
+
+  const handleRemoveFile = () => {
+    form.setValue("foodLicens", undefined);
+    if (fileRef.current?.value) {
+      fileRef.current.value = "";
+    }
   };
 
   return (
     <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger asChild>
-        <Button>
-          <UploadIcon />
+        <Button
+          title={vendor ? "Replace document" : "Upload document"}
+          className="gap-2"
+        >
+          {vendor ? (
+            <>
+              <ReplaceIcon className="h-4 w-4" />
+              <span className="hidden sm:inline">Replace</span>
+            </>
+          ) : (
+            <>
+              <UploadIcon className="h-4 w-4" />
+              <span className="hidden sm:inline">Upload</span>
+            </>
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle>Upload Food License</DialogTitle>
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-2 mt-2">
-            <p className="text-xs text-yellow-700">
-              Upload a <b>.pdf</b> file less than 1MB with correct details.
+        <DialogHeader className="space-y-3">
+          <DialogTitle className="text-xl">Upload Food License</DialogTitle>
+          <DialogDescription className="sr-only">
+            Upload your food license document with issue and expiry dates
+          </DialogDescription>
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 flex gap-2">
+            <AlertCircle className="h-4 w-4 text-yellow-700 flex-shrink-0 mt-0.5" />
+            <p className="text-xs text-yellow-700 leading-relaxed">
+              Upload a <span className="font-semibold">.pdf</span> file less
+              than <span className="font-semibold">1MB</span> with correct
+              details.
             </p>
           </div>
         </DialogHeader>
 
-        <div>
+        <div className="mt-2">
           <Form {...form}>
-            <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+            <form className="space-y-5" onSubmit={form.handleSubmit(onSubmit)}>
               <FormField
                 control={form.control}
                 name="foodLicens"
                 render={({ field }) => (
                   <FormItem>
-                    <div className="flex items-center justify-between">
-                      <FormLabel>Food License</FormLabel>
+                    <div className="flex items-center justify-between mb-2">
+                      <FormLabel className="text-sm font-medium">
+                        Food License Document
+                      </FormLabel>
                       <FormMessage className="text-xs" />
                     </div>
                     <FormControl>
-                      <div className="flex gap-2 border shadow rounded-md">
-                        <Input
-                          ref={fileRef}
-                          type="file"
-                          accept="application/pdf"
-                          onChange={(e) => field.onChange(e.target.files?.[0])}
-                          className="border-none shadow-none"
-                        />
-                        {form.getValues("foodLicens") && (
-                          <Button
-                            variant="outline"
-                            onClick={() => {
-                              field.onChange(null);
-                              if (fileRef.current?.value) {
-                                fileRef.current.value = "";
-                              }
-                            }}
-                          >
-                            <X />
-                          </Button>
+                      <div className="space-y-2">
+                        <div className="relative">
+                          <Input
+                            ref={fileRef}
+                            type="file"
+                            accept="application/pdf"
+                            onChange={(e) =>
+                              field.onChange(e.target.files?.[0])
+                            }
+                            className="cursor-pointer file:bg-gray-100 file:flex file:items-center file:justify-center file:px-2 file:rounded-md file:border-0 file:text-sm file:font-medium"
+                            disabled={loading}
+                          />
+                        </div>
+                        {selectedFile && (
+                          <div className="flex items-center justify-between p-3 bg-muted rounded-md border">
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                              <FileText className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                              <span className="text-sm truncate">
+                                {selectedFile.name}
+                              </span>
+                            </div>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={handleRemoveFile}
+                              className="ml-2 h-8 w-8 p-0 hover:bg-destructive/10"
+                              disabled={loading}
+                            >
+                              <X className="h-4 w-4" />
+                              <span className="sr-only">Remove file</span>
+                            </Button>
+                          </div>
                         )}
                       </div>
                     </FormControl>
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="foodLicensIssueDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center justify-between">
-                      <FormLabel>Issue Date</FormLabel>
-                      <FormMessage className="text-xs" />
-                    </div>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start text-left font-normal",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value
-                              ? format(field.value, "dd-MM-yyyy")
-                              : "dd-mm-yyyy"}
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={
-                            field.value ? new Date(field.value) : undefined
-                          }
-                          onSelect={(date) => {
-                            field.onChange(date ? date.toISOString() : "");
-                          }}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="foodLicensExpiryDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="flex items-center justify-between">
-                      <FormLabel>Expiry Date</FormLabel>
-                      <FormMessage className="text-xs" />
-                    </div>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "w-full justify-start text-left font-normal",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value
-                              ? format(field.value, "dd-MM-yyyy")
-                              : "dd-mm-yyyy"}
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={
-                            field.value ? new Date(field.value) : undefined
-                          }
-                          onSelect={(date) => {
-                            field.onChange(date ? date.toISOString() : "");
-                          }}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </FormItem>
-                )}
-              />
 
-              <Button type="submit" className="w-full" variant="primary">
-                Submit
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="foodLicensIssueDate"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <div className="flex items-center justify-between mb-2">
+                        <FormLabel className="text-sm font-medium">
+                          Issue Date
+                        </FormLabel>
+                        <FormMessage className="text-xs" />
+                      </div>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              disabled={loading}
+                              className={cn(
+                                "w-full justify-start text-left font-normal h-10",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+                              <span className="truncate">
+                                {field.value
+                                  ? format(field.value, "dd-MM-yyyy")
+                                  : "Select date"}
+                              </span>
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={
+                              field.value ? new Date(field.value) : undefined
+                            }
+                            onSelect={(date) => {
+                              field.onChange(date ? date.toISOString() : "");
+                            }}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="foodLicensExpiryDate"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <div className="flex items-center justify-between mb-2">
+                        <FormLabel className="text-sm font-medium">
+                          Expiry Date
+                        </FormLabel>
+                        <FormMessage className="text-xs" />
+                      </div>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              disabled={loading}
+                              className={cn(
+                                "w-full justify-start text-left font-normal h-10",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+                              <span className="truncate">
+                                {field.value
+                                  ? format(field.value, "dd-MM-yyyy")
+                                  : "Select date"}
+                              </span>
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={
+                              field.value ? new Date(field.value) : undefined
+                            }
+                            onSelect={(date) => {
+                              field.onChange(date ? date.toISOString() : "");
+                            }}
+                            disabled={(date) => date < new Date()}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full h-11 gap-2"
+                variant="primary"
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <span>Uploading...</span>
+                  </>
+                ) : (
+                  <span>Submit</span>
+                )}
               </Button>
             </form>
           </Form>

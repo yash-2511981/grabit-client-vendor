@@ -30,7 +30,7 @@ export const imageValidation = z
 
 //pdf validations
 export const fileValidations = z
-  .custom<File>()
+  .custom<File | undefined>()
   .refine((file) => !file || file instanceof File, {
     message: "File is required",
   })
@@ -143,6 +143,24 @@ export const foodLicensModalSchema = z.object({
 });
 
 export type FoodLicensModelType = z.infer<typeof foodLicensModalSchema>;
+
+export const aadharCardModalSchema = z.object({
+  aadharCard: fileValidations,
+  aadharNumber: onlyNumbers
+    .min(12, { error: "Invalid value" })
+    .max(12, { error: "Invalid value" }),
+});
+
+export type AadharCardModalType = z.infer<typeof aadharCardModalSchema>;
+
+export const panCardModalSchema = z.object({
+  panCard: fileValidations,
+  panNumber: z
+    .string()
+    .regex(/^[A-Z]{5}[0-9]{4}[A-Z]$/, { message: "Invalid PAN number format" }),
+});
+
+export type PanCardModalType = z.infer<typeof panCardModalSchema>;
 
 export const bankDetailsFormSchema = z.object({
   _id: z.string().optional(),

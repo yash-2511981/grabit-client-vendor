@@ -110,7 +110,7 @@ const ViewOrEditProfile = () => {
             <CardTitle className="text-xl flex gap-1 font-bold">
               Dhaba Dhaba
               <span className="text-yellow-600 flex items-center text-sm font-semibold gap-1">
-                <VerifiedIcon size={20} />
+                {vendor?.verified && <VerifiedIcon size={20} />}
               </span>
             </CardTitle>
 

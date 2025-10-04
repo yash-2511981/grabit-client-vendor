@@ -51,7 +51,7 @@ const UploadFoodLicensModal = () => {
   });
 
   const fileRef = useRef<HTMLInputElement>(null);
-  const { setVendorDocuments, vendor } = useVendorStore();
+  const { setVendorDocuments, documents } = useVendorStore();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { post } = useApi();
@@ -130,10 +130,10 @@ const UploadFoodLicensModal = () => {
     <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger asChild>
         <Button
-          title={vendor ? "Replace document" : "Upload document"}
+          title={documents?.foodLicensIssueDate ? "Replace document" : "Upload document"}
           className="gap-2"
         >
-          {vendor ? (
+          {documents?.foodLicensIssueDate ? (
             <>
               <ReplaceIcon className="h-4 w-4" />
               <span className="hidden sm:inline">Replace</span>

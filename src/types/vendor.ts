@@ -37,12 +37,9 @@ export type BankDetailsType = {
 export type VendorDocuments = {
   _id: string;
   vendorId: string;
-  foodLicensFileUrl?: string | undefined;
   foodLicensIssueDate: Date | undefined;
   foodLicensExpiryDate: Date | undefined;
-  adharCardFileUrl?: string | undefined;
-  addharCardNumber: number | undefined;
-  panCardFileUrl?: string | undefined;
+  aadharCardNumber: number | undefined;
   panCardNumber: string | undefined;
   verificationStatus: "pending" | "send for approval" | "rejected" | "verified";
 };

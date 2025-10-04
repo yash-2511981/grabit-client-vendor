@@ -1,12 +1,14 @@
 import SuggestionText from "@/components/SuggetionText";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import UploadAadharCard from "@/components/UploadAadharCard";
 import UploadFoodLicensModal from "@/components/UploadFoodLicensModal";
+import UploadPanCard from "@/components/UploadPanCard";
 import useApi from "@/hooks/useApi";
 import { GET_VENDOR_DOC, GET_VIEW_URL } from "@/lib/routes";
 import useVendorStore from "@/store/store";
 import { format } from "date-fns";
-import { Eye, FolderClosed, ReplaceIcon, UploadIcon } from "lucide-react";
+import { Eye, FolderClosed } from "lucide-react";
 import { useEffect } from "react";
 
 const ViewOrEditDocument = () => {
@@ -30,6 +32,20 @@ const ViewOrEditDocument = () => {
 
   const viewFoodLicense = async () => {
     const result = await get(`${GET_VIEW_URL}/foodlicense`);
+    if (result?.success) {
+      window.open(result.data.url);
+    }
+  };
+
+  const viewAadharCard = async () => {
+    const result = await get(`${GET_VIEW_URL}/aadhar`);
+    if (result?.success) {
+      window.open(result.data.url);
+    }
+  };
+
+  const viewPanCard = async () => {
+    const result = await get(`${GET_VIEW_URL}/pan`);
     if (result?.success) {
       window.open(result.data.url);
     }
@@ -79,25 +95,21 @@ const ViewOrEditDocument = () => {
               <div>
                 <p className="text-lg font-semibold">Aadhar Card</p>
                 <span className="text-muted-foreground text-sm">
-                  {documents?.addharCardNumber
-                    ? "Adhar No. XXXX-XXXX-8787"
-                    : "upload aadharcard front and back in single .pdf"}
+                  {documents?.aadharCardNumber
+                    ? documents.aadharCardNumber
+                    : "upload your aadhar card .pdf"}
                 </span>
               </div>
               <div className="flex gap-3">
-                {documents?.addharCardNumber ? (
+                {documents?.aadharCardNumber ? (
                   <>
-                    <Button>
+                    <Button onClick={viewAadharCard}>
                       <Eye />
                     </Button>
-                    <Button>
-                      <ReplaceIcon />
-                    </Button>
+                    <UploadAadharCard />
                   </>
                 ) : (
-                  <Button>
-                    <UploadIcon />
-                  </Button>
+                  <UploadAadharCard />
                 )}
               </div>
             </div>
@@ -115,17 +127,13 @@ const ViewOrEditDocument = () => {
               <div className="flex gap-3">
                 {documents?.panCardNumber ? (
                   <>
-                    <Button>
+                    <Button onClick={viewPanCard}>
                       <Eye />
                     </Button>
-                    <Button>
-                      <ReplaceIcon />
-                    </Button>
+                    <UploadPanCard />
                   </>
                 ) : (
-                  <Button>
-                    <UploadIcon />
-                  </Button>
+                  <UploadPanCard />
                 )}
               </div>
             </div>

@@ -41,3 +41,6 @@ export const UPLOAD_PAN = `${AUTH_ROUTES}/upload-pan-card`;
 
 export const GET_VENDOR_DOC = `${AUTH_ROUTES}/get-vendor-docs`;
 export const GET_VIEW_URL = `${AUTH_ROUTES}/get-doc-access`;
+
+//account settings
+export const UPDATE_PERMISSIONS = `${AUTH_ROUTES}/update-permission`;

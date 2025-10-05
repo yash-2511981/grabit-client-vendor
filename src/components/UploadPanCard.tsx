@@ -90,7 +90,7 @@ const UploadPanCard = () => {
       },
       "Pan Card uploaded"
     );
-    console.log(result);
+
     if (result?.success) {
       setVendorDocuments(result.data.vendorDocs);
     }

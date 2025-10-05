@@ -1,16 +1,18 @@
 export type Vendor = {
   id: string;
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  pincode: string;
-  category: "veg" | "non-veg" | "both";
-  ownerName: string;
-  ownerEmail: string;
-  ownerContact: string;
-  restaurantImageUrl: string;
-  verified: boolean;
+  name?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  pincode?: string;
+  category?: "veg" | "non-veg" | "both";
+  ownerName?: string;
+  ownerEmail?: string;
+  ownerContact?: string;
+  restaurantImageUrl?: string;
+  emailNotify?: boolean;
+  smsNotify?: boolean;
+  verified?: boolean;
 };
 
 export type ProductType = {

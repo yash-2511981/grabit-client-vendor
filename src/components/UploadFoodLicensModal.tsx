@@ -90,7 +90,7 @@ const UploadFoodLicensModal = () => {
       method: "POST",
       body: formData,
     });
-    console.log(cloudinaryResult);
+    
     if (!cloudinaryResult.ok) {
       toast.error("Failed to upload file");
       setLoading(false);
@@ -107,7 +107,7 @@ const UploadFoodLicensModal = () => {
       },
       "File Uploaded successfully"
     );
-    console.log(result);
+    
     if (result?.success) {
       setVendorDocuments(result.data.vendorDocs);
     }

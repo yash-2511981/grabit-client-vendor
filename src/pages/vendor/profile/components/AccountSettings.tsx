@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import UpdatePasswordModal from "@/components/UpdatePasswordModal";
 import useApi from "@/hooks/useApi";
 import { UPDATE_PERMISSIONS } from "@/lib/routes";
 import useVendorStore from "@/store/store";
@@ -52,9 +52,7 @@ const AccountSettings = () => {
             onCheckedChange={(checked) => updateSettings("smsNotify", checked)}
           />
         </div>
-        <Button className="w-full mt-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white text-sm h-8 shadow-sm">
-          Manage Password
-        </Button>
+        <UpdatePasswordModal />
       </CardContent>
     </Card>
   );

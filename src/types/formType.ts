@@ -162,6 +162,15 @@ export const panCardModalSchema = z.object({
 
 export type PanCardModalType = z.infer<typeof panCardModalSchema>;
 
+export const updatePasswordModalSchema = z.object({
+  oldPassword: z.string().min(1, { error: "invalid value" }),
+  newPassword: z
+    .string()
+    .min(6, { error: "password should contains at least six characters" }),
+});
+
+export type UpdatePasswordModalType = z.infer<typeof updatePasswordModalSchema>;
+
 export const bankDetailsFormSchema = z.object({
   _id: z.string().optional(),
   bankName: onlyCharsSpace,

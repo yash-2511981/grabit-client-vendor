@@ -90,9 +90,9 @@ const ViewOrEditProfile = () => {
 
     if (result?.success) {
       setVendor(result.data.restaurant);
-      setIsEditing(false);
-      toast.success("Profile updated successfully!");
     }
+    setIsEditing(false);
+    setIsLoading(false);
   };
 
   const handleCancel = () => {

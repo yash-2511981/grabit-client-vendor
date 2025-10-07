@@ -21,7 +21,7 @@ const SidebarFooter = () => {
   };
 
   const handleSwitchClick = async (checked: boolean) => {
-    const successMessage = checked ? "Your open" : "Your close";
+    const successMessage = checked ? "Ready to receive orders!" : "You're offline.";
     const result = await patch(
       UPDATE_STATUS,
       { status: checked },

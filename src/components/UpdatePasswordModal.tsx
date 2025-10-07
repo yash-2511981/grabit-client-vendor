@@ -172,10 +172,7 @@ const UpdatePasswordModal = () => {
                 >
                   Cancel
                 </Button>
-                <Button
-                  type="submit"
-                  className="flex-1 h-10 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700"
-                >
+                <Button type="submit" className="flex-1 h-10" variant="primary">
                   Update Password
                 </Button>
               </div>

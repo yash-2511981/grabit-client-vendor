@@ -8,7 +8,7 @@ const orderServices: service[] = [
   { text: "Completed", serviceName: "completedOrders", icon: CircleCheckIcon },
 ];
 
-const ManageOrders = () => {
+const ManageOrders = () => {  
   const [openService, setOpenService] = useState<string>("pendignOrders");
 
   return (

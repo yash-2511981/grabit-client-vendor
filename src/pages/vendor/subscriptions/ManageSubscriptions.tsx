@@ -10,6 +10,11 @@ const subscriptionServices: service[] = [
     serviceName: "allSubscriptions",
   },
   {
+    text: "Active Subscriptions",
+    icon: Subscript,
+    serviceName: "allSubscriptions",
+  },
+  {
     text: "Add Subscriptions",
     icon: PlusIcon,
     serviceName: "addOrEditSubscriptions",

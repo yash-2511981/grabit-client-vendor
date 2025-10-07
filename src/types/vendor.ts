@@ -4,7 +4,7 @@ export type Vendor = {
   email?: string;
   phone?: string;
   address?: string;
-  pincode?: string;
+  pincode: string;
   category?: "veg" | "non-veg" | "both";
   ownerName?: string;
   ownerEmail?: string;

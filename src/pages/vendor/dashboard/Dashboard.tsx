@@ -74,7 +74,7 @@ const Dashboard = () => {
     },
   ];
   return (
-    <div className="h-full space-y-6 px-2 sm:p-4 flex flex-col overflow-x-hidden app-background">
+    <div className="h-screen space-y-6 px-2 sm:p-4 flex flex-col overflow-x-hidden app-background">
       <div className="flex flex-col gap-2 max-md:mt-14">
         <h1 className="text-3xl sm:text-4xl font-semibold">
           Business Dashboard

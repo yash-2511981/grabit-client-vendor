@@ -1,6 +1,7 @@
 const HOST = import.meta.env.VITE_SERVER_URL;
 
 const AUTH_ROUTES = `${HOST}/ots/vendor`;
+
 //auth request
 export const SIGN_IN = `${AUTH_ROUTES}/sign-in`;
 export const SIGN_UP = `${AUTH_ROUTES}/sign-up`;
@@ -39,9 +40,14 @@ export const UPLOAD_AADHAR = `${AUTH_ROUTES}/upload-aadhar-card`;
 export const UPLOAD_PAN = `${AUTH_ROUTES}/upload-pan-card`;
 
 //get signed url for private docs
-
 export const GET_VENDOR_DOC = `${AUTH_ROUTES}/get-vendor-docs`;
 export const GET_VIEW_URL = `${AUTH_ROUTES}/get-doc-access`;
 
 //account settings
 export const UPDATE_PERMISSIONS = `${AUTH_ROUTES}/update-permission`;
+
+//subscription routes
+export const ADD_SUBSCRIPTION = `${AUTH_ROUTES}/add-subscription`;
+export const UPDATE_SUBSCRIPTION = `${AUTH_ROUTES}/update-subscription`;
+export const DELETE_SUBSCRIPTIONS = `${AUTH_ROUTES}/delete-subscriptions`;
+export const GET_ALL_SUBSCRIPTIONS = `${AUTH_ROUTES}/get-all-subscriptions`;

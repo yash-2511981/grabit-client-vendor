@@ -1,9 +1,9 @@
 import useApi from "@/hooks/useApi";
 import { GET_ALL_PRODUCTS } from "@/lib/routes";
-import { cn } from "@/lib/utils";
 import useVendorStore from "@/store/store";
 import { Check, Package } from "lucide-react";
 import { useEffect, useState } from "react";
+import CategoryBadge from "./CategoryBadge";
 
 const ViewProducts = () => {
   const {
@@ -83,24 +83,6 @@ const ViewProducts = () => {
         ⭐
       </span>
     ));
-  };
-
-  const CategoryBadge = ({ category }: { category: string }) => {
-    return (
-      <div
-        className={cn(
-          "w-4 h-4 rounded-xs border-2 bg-white flex items-center justify-center shadow-sm",
-          "border-green-500",
-          { "border-red-500": category === "non-veg" }
-        )}
-      >
-        <div
-          className={cn("w-2 h-2 rounded-full bg-green-500", {
-            "bg-red-500": category === "non-veg",
-          })}
-        ></div>
-      </div>
-    );
   };
 
   return (

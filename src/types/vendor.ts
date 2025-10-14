@@ -24,6 +24,32 @@ export type ProductType = {
   imageUrl: string;
   ratingCount: number;
   rating: number;
+
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type Subscription = {
+  _id: string;
+  restaurant: string;
+  name: string;
+  duration: "1m" | "3m" | "6m" | "12m";
+
+  sunday: string;
+  monday: string;
+  tuesday: string;
+  wednesday: string;
+  thursday: string;
+  friday: string;
+  saturday: string;
+
+  price: number;
+  save: number;
+  mealTime: "breakfast" | "lunch" | "dinner";
+  category: "veg" | "non-veg" | "both";
+
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type BankDetailsType = {
@@ -74,8 +100,13 @@ export type VendorSlices = {
   selectedProducts: string[];
   selectProduct: (product: string) => void;
   deselectProduct: (product: string) => void;
-  editProduct: ProductType | null;
-  setEditProduct: (product: string | null) => void;
+  getEditProduct: (product: string | null) => ProductType | null;
+  subscriptions: Subscription[];
+  setSubscriptions: (subscriptions: Subscription[]) => void;
+  addSubscription: (subscription: Subscription) => void;
+  updateSubscription: (subscription: Subscription) => void;
+  deleteSubscriptions: (subscriptionIds: string[]) => void;
+  getEditSubscription: (id: string) => Subscription | undefined;
   notifications: Notification[];
   setNotifications: (notifications: Notification[]) => void;
   addNotifications: (Notification: Notification) => void;

@@ -4,15 +4,15 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Landing from "./pages/landing/landing";
 import Auth from "./pages/auth/Auth";
 import useApi from "./hooks/useApi";
-import { GET_VENDOR_INFO } from "./lib/routes";
+import { GET_ALL_PRODUCTS, GET_VENDOR_INFO } from "./lib/routes";
 import useVendorStore from "./store/store";
 import VendorLayout from "./pages/vendor/VendorLayout";
-import ManageProduct from "./pages/vendor/products/ManageProduct";
 import ManageOrders from "./pages/vendor/orders/ManageOrders";
 import ManageProfile from "./pages/vendor/profile/ManageProfile";
 import ManageSubscriptions from "./pages/vendor/subscriptions/ManageSubscriptions";
 import ManageWallet from "./pages/vendor/wallet/MangeWallet";
 import Dashboard from "./pages/vendor/dashboard/Dashboard";
+import ManageProduct from "./pages/vendor/products/ManageProduct";
 interface RouteWrapperProps {
   children: ReactNode;
 }
@@ -31,11 +31,16 @@ function PriavteRoutes({ children }: RouteWrapperProps) {
 
 function App() {
   const { get } = useApi();
-  const { setVendor } = useVendorStore();
+  const { setVendor, setProducts } = useVendorStore();
 
   useEffect(() => {
     const fetchData = async () => {
       const getVendorData = await get(GET_VENDOR_INFO);
+      const result = await get(GET_ALL_PRODUCTS);
+
+      if (result?.success) {
+        setProducts(result.data.products);
+      }
       if (getVendorData?.success) {
         setVendor(getVendorData.data.restaurant);
       }

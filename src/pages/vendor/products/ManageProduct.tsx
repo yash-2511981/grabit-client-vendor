@@ -12,9 +12,9 @@ import { DELETE_PRODUCT } from "@/lib/routes";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const productsServices: service[] = [
-  { text: "View Products", icon: StoreIcon, serviceName: "viewProduct" },
+  { text: "All", icon: StoreIcon, serviceName: "viewProduct" },
   {
-    text: "Add Product",
+    text: "Add",
     icon: PlusIcon,
     serviceName: "addProduct",
     emptyState: true,
@@ -22,21 +22,18 @@ const productsServices: service[] = [
 ];
 
 const ManageProduct = () => {
-  const { selectedProducts, setEditProduct, editProduct, deleteProducts } =
-    useVendorStore();
+  const { selectedProducts, getEditProduct, deleteProducts } = useVendorStore();
   const [openService, setOpenService] = useState<vendorservices>("viewProduct");
   const { post } = useApi();
   const [openDialogue, setOpenDialogue] = useState(false);
 
   const handleEditClick = () => {
     if (selectedProducts.length === 1) {
-      setEditProduct(selectedProducts[0]);
       setOpenService("editProduct");
     }
   };
 
   const handleDeleteClick = async () => {
-    console.log(selectedProducts);
     const result = await post(
       DELETE_PRODUCT,
       { selectedProducts: [...selectedProducts] },
@@ -104,7 +101,7 @@ const ManageProduct = () => {
         {openService === "editProduct" && (
           <AddOrEditProduct
             setOpenService={setOpenService}
-            editProduct={editProduct}
+            editProduct={getEditProduct(selectedProducts[0])}
           />
         )}
         {openService === "viewProduct" && <ViewProducts />}

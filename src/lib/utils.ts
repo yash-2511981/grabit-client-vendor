@@ -1,3 +1,4 @@
+import type { Day } from "@/types/types";
 import { cva } from "class-variance-authority";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -73,3 +74,13 @@ export const getFormatedDate = (date: Date): string => {
     hour12: true,
   });
 };
+
+export const days: Day[] = [
+  "sunday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+];

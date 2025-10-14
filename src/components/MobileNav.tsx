@@ -16,7 +16,6 @@ const MobileNav = () => {
       </SheetTrigger>
       <SheetContent side="left" className="w-[220px] h-screen app-background">
         <Logo />
-
         <div className="flex flex-col justify-between h-[calc(100vh-80px)]">
           <div className="flex flex-col">
             <div className="mt-5 flex flex-col space-y-2 p-3 ">

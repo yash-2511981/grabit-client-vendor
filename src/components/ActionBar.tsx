@@ -10,13 +10,13 @@ interface ActionBarProps {
 
 const ActionBar = ({ setOpenService, openService, links }: ActionBarProps) => {
   return (
-    <div className="gap-3 grid grid-flow-col max-w-sm">
+    <div className="gap-3 grid grid-flow-col w-fit">
       {links.map((service, index) => (
         <Button
           key={index}
           variant={openService === service.serviceName ? "primary" : "outline"}
           className={cn(
-            "w-35 p-2 flex justify-center gap-2 border rounded-sm ",
+            "w-25 p-2 flex justify-center gap-2 border rounded-sm ",
             { "w-10": !service.text }
           )}
           onClick={() => setOpenService(service.serviceName)}

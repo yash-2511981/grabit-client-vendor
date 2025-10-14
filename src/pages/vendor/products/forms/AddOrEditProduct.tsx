@@ -212,7 +212,7 @@ const AddOrEditProduct = ({
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       <Card className="card-amber-gradient shadow-sm border-amber-200">
         <CardHeader className="border-b border-amber-200/50">
           <CardTitle className="text-xl flex items-center gap-3 text-gray-800">

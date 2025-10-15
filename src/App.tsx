@@ -31,7 +31,7 @@ function PriavteRoutes({ children }: RouteWrapperProps) {
 
 function App() {
   const { get } = useApi();
-  const { setVendor, setProducts } = useVendorStore();
+  const { setVendor, setProducts, vendor } = useVendorStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,7 +47,7 @@ function App() {
     };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [vendor]);
 
   return (
     <BrowserRouter>

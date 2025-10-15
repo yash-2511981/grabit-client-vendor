@@ -93,20 +93,43 @@ export type AddOrEditProductType = z.infer<typeof addProductSchema>;
 
 //add or edit subscription for schema
 export const addOrEditSubscriptionSchema = z.object({
+  _id: z.string().optional(),
   name: onlyCharsSpace,
-  duration: z.enum(["1m", "2m", "3m", "4m"], { error: "invalid input" }),
-  day1: z.string().min(1, { error: "invalid product" }),
-  day2: z.string().min(1, { error: "invalid product" }),
-  day3: z.string().min(1, { error: "invalid product" }),
-  day4: z.string().min(1, { error: "invalid product" }),
-  day5: z.string().min(1, { error: "invalid product" }),
-  day6: z.string().min(1, { error: "invalid product" }),
-  day7: z.string().min(1, { error: "invalid product" }),
-  price: z.string().regex(/^\d+$/, { error: "invalid amount" }),
-  mealtime: z.enum(["breakfast", "lunch", "dinner"]),
+  duration: z.enum(["1m", "3m", "6m", "12m"], { message: "invalid input" }),
+
+  sunday: z
+    .string({ error: "select product" })
+    .min(1, { message: "invalid product" }),
+  monday: z
+    .string({ error: "select product" })
+    .min(1, { message: "invalid product" }),
+  tuesday: z
+    .string({ error: "select product" })
+    .min(1, { message: "invalid product" }),
+  wednesday: z
+    .string({ error: "select product" })
+    .min(1, { message: "invalid product" }),
+  thursday: z
+    .string({ error: "select product" })
+    .min(1, { message: "invalid product" }),
+  friday: z
+    .string({ error: "select product" })
+    .min(1, { message: "invalid product" }),
+  saturday: z
+    .string({ error: "select product" })
+    .min(1, { message: "invalid product" }),
+
+  price: z
+    .string({ error: "enter price" })
+    .regex(/^\d+$/, { message: "invalid amount" }),
+  save: z.number({ error: "failed to calculate the saving amount" }),
+  mealTime: z.enum(["breakfast", "lunch", "dinner"], {
+    error: "select mealtime",
+  }),
+  category: z.enum(["veg", "non-veg", "both"], { error: "invalid category" }),
 });
 
-export type addOrEditSubscriptionType = z.infer<
+export type AddOrEditSubscriptionType = z.infer<
   typeof addOrEditSubscriptionSchema
 >;
 

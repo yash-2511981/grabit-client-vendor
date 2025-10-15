@@ -11,9 +11,9 @@ const useApi = () => {
     data?: T,
     successMessage?: string
   ) => {
+    let response: AxiosResponse;
     try {
       const Config = { withCredentials: true };
-      let response: AxiosResponse;
       switch (method) {
         case "get":
           response = await apiCLient.get(route, Config);
@@ -43,7 +43,12 @@ const useApi = () => {
       }
     } catch (error) {
       const axiosErro = error as AxiosError;
-      console.log(axiosErro.response?.data);
+      if (
+        typeof axiosErro.response?.data === "string" &&
+        axiosErro.response.data.length > 10
+      ) {
+        toast.error(axiosErro.response.data);
+      }
       return { success: false };
     }
   };

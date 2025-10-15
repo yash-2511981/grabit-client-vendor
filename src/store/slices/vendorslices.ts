@@ -47,10 +47,34 @@ export const vendorSlices: StateCreator<VendorSlices> = (set, get) => ({
     const newList = selectedProducts.filter((p) => p !== product);
     set({ selectedProducts: newList });
   },
-  editProduct: null,
-  setEditProduct: (id) => {
+  getEditProduct: (id) => {
     const editProduct = get().products.find((p) => p._id === id);
-    set({ editProduct });
+    return editProduct || null;
+  },
+  subscriptions: [],
+  setSubscriptions: (subscriptions) => set({ subscriptions }),
+  addSubscription: (subscription) => {
+    const subscriptions = [...get().subscriptions];
+    subscriptions.unshift(subscription);
+    set({ subscriptions });
+  },
+  updateSubscription: (subscription) => {
+    const subscriptions = [...get().subscriptions];
+    const index = subscriptions.findIndex((s) => s._id === subscription._id);
+    if (index !== -1) {
+      subscriptions[index] = { ...subscriptions[index], ...subscription };
+    }
+    set({ subscriptions });
+  },
+  deleteSubscriptions: (dataDeletedSubscriptions) => {
+    const subscriptions = get().subscriptions.filter(
+      (s) => !dataDeletedSubscriptions.includes(s._id)
+    );
+    set({ subscriptions });
+  },
+  getEditSubscription: (id) => {
+    const subscription = get().subscriptions.find((s) => s._id === id);
+    return subscription || undefined;
   },
   notifications: mockNotifications,
   setNotifications: (notifications) => set({ notifications }),

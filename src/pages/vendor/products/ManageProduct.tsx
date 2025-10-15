@@ -109,7 +109,12 @@ const ManageProduct = () => {
 
       <Dialog open={openDialogue} onOpenChange={setOpenDialogue}>
         <DialogContent className="sm:max-w-md">
-          <DialogBox setOpen={setOpenDialogue} action={handleDeleteClick} />
+          <DialogBox
+            setOpen={setOpenDialogue}
+            onConfirm={handleDeleteClick}
+            itemType="Products"
+            itemCount={selectedProducts.length}
+          />
         </DialogContent>
       </Dialog>
     </div>

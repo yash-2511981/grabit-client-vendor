@@ -7,7 +7,9 @@ export type vendorservices =
   | "pendignOrders"
   | "completedOrders"
   | "allSubscriptions"
-  | "addOrEditSubscriptions";
+  | "activeSubscription"
+  | "addSubscription"
+  | "editSubscription";
 
 export type service = {
   text?: string;
@@ -15,6 +17,15 @@ export type service = {
   serviceName: vendorservices;
   emptyState?: boolean;
 };
+
+export type Day =
+  | "sunday"
+  | "monday"
+  | "tuesday"
+  | "wednesday"
+  | "thursday"
+  | "friday"
+  | "saturday";
 
 export type metric = {
   label: string;

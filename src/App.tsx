@@ -36,13 +36,21 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       const getVendorData = await get(GET_VENDOR_INFO);
-      const result = await get(GET_ALL_PRODUCTS);
 
-      if (result?.success) {
-        setProducts(result.data.products);
-      }
       if (getVendorData?.success) {
         setVendor(getVendorData.data.restaurant);
+      }
+    };
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!vendor) return;
+    const fetchData = async () => {
+      const [productData] = await Promise.all([get(GET_ALL_PRODUCTS)]);
+      if (productData?.success) {
+        setProducts(productData.data.products);
       }
     };
     fetchData();

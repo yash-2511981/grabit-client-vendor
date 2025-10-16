@@ -54,7 +54,7 @@ const ManageSubscriptions = () => {
     if (selectedSubscriptions.length < 0) return;
     const result = await post(
       DELETE_SUBSCRIPTIONS,
-      selectedSubscriptions,
+      { subscriptions: selectedSubscriptions },
       `${selectedSubscriptions.length} Subscription${
         selectedSubscriptions.length > 1 && "s"
       } deleted`

@@ -41,16 +41,12 @@ const ManageSubscriptions = () => {
   );
   const [openDialogue, setOpenDialogue] = useState(false);
 
-  //functions to manage the select list
   const selectSubscription = (id: string) => {
-    selectedSubscriptions.push(id);
-    console.log("subsscription added " + selectedSubscriptions);
+    setSelectedSubscriptions([...selectedSubscriptions, id]);
   };
 
   const deselectSubscription = (id: string) => {
-    const filteredSubscriptions = selectedSubscriptions.filter((s) => s !== id);
-    console.log("subscription removed" + filteredSubscriptions);
-    setSelectedSubscriptions(filteredSubscriptions);
+    setSelectedSubscriptions(selectedSubscriptions.filter((s) => s !== id));
   };
 
   //delete subscriptions

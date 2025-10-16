@@ -34,6 +34,7 @@ import {
 import WeeklyMenuSelector from "@/components/WeeklyMenuSelector";
 import useVendorStore from "@/store/store";
 import type { Subscription } from "@/types/vendor";
+import { toast } from "sonner";
 
 const AddOrEditSubscriptions = ({
   setOpenService,
@@ -66,6 +67,7 @@ const AddOrEditSubscriptions = ({
   const onSubmit = async (data: AddOrEditSubscriptionType) => {
     console.log(data);
     const isEdit = !!editSubscription;
+    console.log(isEdit);
 
     //check any changes are made while editing
     if (isEdit) {
@@ -84,7 +86,7 @@ const AddOrEditSubscriptions = ({
         editSubscription.saturday === data.saturday;
 
       if (noChanges) {
-        //No actual changes — skip API call
+        toast.info("No changed detected");
         setOpenService("allSubscriptions");
         return;
       }
@@ -95,7 +97,11 @@ const AddOrEditSubscriptions = ({
       ? "Subscription Updated"
       : "New Subscription Added";
 
-    const result = await post(url, data, successMsg);
+    const subscriptionData = isEdit
+      ? { _id: editSubscription._id, ...data }
+      : data;
+
+    const result = await post(url, subscriptionData, successMsg);
     if (result?.success) {
       if (isEdit) updateSubscription(result.data.subscription);
       else addSubscription(result.data.subscription);

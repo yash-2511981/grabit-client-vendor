@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader } from "./ui/card";
 import { Check, TrendingDown } from "lucide-react";
 import CategoryBadge from "./CategoryBadge";
 import { format } from "date-fns";
-import { days } from "@/lib/utils";
 import { Badge } from "./ui/badge";
 
 const SubscriptionCard = ({
@@ -25,6 +24,7 @@ const SubscriptionCard = ({
       "6m": "6 Months",
       "12m": "12 Months",
     };
+
     return map[duration] || duration;
   };
 
@@ -32,7 +32,9 @@ const SubscriptionCard = ({
     return products.find((p) => p._id === productId);
   };
 
-  const allProducts = days.map((day) => getProduct(subscription[day]));
+  const productsName = subscription.weeklyMenu
+    .map((id) => getProduct(id)?.name || "")
+    .filter((name) => name !== "");
 
   return (
     <Card
@@ -78,10 +80,10 @@ const SubscriptionCard = ({
       <CardContent className="space-y-2">
         <div className="bg-gray-50 rounded p-2 border border-gray-200">
           <div className="flex flex-wrap gap-x-1 gap-y-0.5 text-[11px] text-gray-700">
-            {allProducts.map((product, idx) => (
+            {productsName.map((product, idx) => (
               <span key={idx}>
-                {product?.name}
-                {idx < allProducts.length - 1 && (
+                {product}
+                {idx < productsName.length - 1 && (
                   <span className="text-gray-400 ml-1">•</span>
                 )}
               </span>

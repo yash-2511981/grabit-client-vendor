@@ -51,13 +51,7 @@ const AddOrEditSubscriptions = ({
     defaultValues: {
       name: editSubscription?.name,
       duration: editSubscription?.duration,
-      sunday: editSubscription?.sunday,
-      monday: editSubscription?.monday,
-      tuesday: editSubscription?.tuesday,
-      wednesday: editSubscription?.wednesday,
-      thursday: editSubscription?.thursday,
-      friday: editSubscription?.friday,
-      saturday: editSubscription?.saturday,
+      weeklyMenu: editSubscription?.weeklyMenu || Array(7).fill(""),
       price: editSubscription?.price.toString() || "0",
       mealTime: editSubscription?.mealTime,
       category: editSubscription?.category,
@@ -65,9 +59,9 @@ const AddOrEditSubscriptions = ({
   });
 
   const onSubmit = async (data: AddOrEditSubscriptionType) => {
-    console.log(data);
+    
     const isEdit = !!editSubscription;
-    console.log(isEdit);
+    
 
     //check any changes are made while editing
     if (isEdit) {
@@ -77,13 +71,8 @@ const AddOrEditSubscriptions = ({
         editSubscription.category === data.category &&
         editSubscription.duration === data.duration &&
         editSubscription.mealTime === data.mealTime &&
-        editSubscription.sunday === data.sunday &&
-        editSubscription.monday === data.monday &&
-        editSubscription.tuesday === data.tuesday &&
-        editSubscription.wednesday === data.wednesday &&
-        editSubscription.thursday === data.thursday &&
-        editSubscription.friday === data.friday &&
-        editSubscription.saturday === data.saturday;
+        JSON.stringify(editSubscription.weeklyMenu) ===
+          JSON.stringify(data.weeklyMenu);
 
       if (noChanges) {
         toast.info("No changed detected");

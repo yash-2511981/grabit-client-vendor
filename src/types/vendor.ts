@@ -35,13 +35,7 @@ export type Subscription = {
   name: string;
   duration: "1m" | "3m" | "6m" | "12m";
 
-  sunday: string;
-  monday: string;
-  tuesday: string;
-  wednesday: string;
-  thursday: string;
-  friday: string;
-  saturday: string;
+  weeklyMenu: string[];
 
   price: number;
   save: number;

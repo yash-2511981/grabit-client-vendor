@@ -23,56 +23,70 @@ interface DailyMenuSelectorProps {
   menuProducts: ProductType[];
   getProductName: (id: string) => ProductType | undefined;
   day: Day;
-  selectedMenu: Record<Day, string>;
+  dayIndex: number;
+  selectedMenu: string[];
 }
 
 const DailyMenuSelector = ({
   day,
+  dayIndex,
   formControl,
   menuProducts,
   getProductName,
   selectedMenu,
 }: DailyMenuSelectorProps) => {
   const productName = useMemo(() => {
-    const name = getProductName(selectedMenu[day])?.name || "Select";
+    const name = getProductName(selectedMenu[dayIndex])?.name || "Select";
     return name;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedMenu[day]]);
+  }, [selectedMenu, dayIndex, getProductName]);
 
   return (
     <FormField
       key={day}
       control={formControl}
-      name={day}
-      render={({ field }) => (
-        <FormItem>
-          <div className="flex justify-between items-center">
-            <FormLabel className="text-xs capitalize text-gray-700">
-              {day}
-            </FormLabel>
-            <FormMessage />
-          </div>
-          <FormControl>
-            <Select value={field.value} onValueChange={field.onChange}>
-              <SelectTrigger className="border-amber-200 focus:border-amber-400 focus:ring-amber-200 h-9 w-full">
-                <SelectValue>{productName}</SelectValue>
-              </SelectTrigger>
-              <SelectContent position="popper" sideOffset={5}>
-                {selectedMenu[day] !== "" && (
-                  <SelectItem value="none">Clear Selection</SelectItem>
-                )}
-                {menuProducts.map((p) => {
-                  return (
-                    <SelectItem key={p._id} value={p._id}>
-                      {p.name}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-          </FormControl>
-        </FormItem>
-      )}
+      name="weeklyMenu"
+      render={({ field }) => {
+
+        
+        const handleProductSelection = (value: string) => {
+          const newMenu = [...field.value];
+          newMenu[dayIndex] = value === "none" ? "" : value;
+          field.onChange(newMenu);
+        };
+
+        return (
+          <FormItem>
+            <div className="flex justify-between items-center">
+              <FormLabel className="text-xs capitalize text-gray-700">
+                {day}
+              </FormLabel>
+              <FormMessage />
+            </div>
+            <FormControl>
+              <Select
+                value={field.value[dayIndex] || ""}
+                onValueChange={handleProductSelection}
+              >
+                <SelectTrigger className="border-amber-200 focus:border-amber-400 focus:ring-amber-200 h-9 w-full">
+                  <SelectValue>{productName}</SelectValue>
+                </SelectTrigger>
+                <SelectContent position="popper" sideOffset={5}>
+                  {selectedMenu[dayIndex] !== "" && (
+                    <SelectItem value="none">Clear Selection</SelectItem>
+                  )}
+                  {menuProducts.map((p) => {
+                    return (
+                      <SelectItem key={p._id} value={p._id}>
+                        {p.name}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            </FormControl>
+          </FormItem>
+        );
+      }}
     />
   );
 };

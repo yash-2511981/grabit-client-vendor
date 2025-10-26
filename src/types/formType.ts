@@ -97,28 +97,10 @@ export const addOrEditSubscriptionSchema = z.object({
   name: onlyCharsSpace,
   duration: z.enum(["1m", "3m", "6m", "12m"], { message: "invalid input" }),
 
-  sunday: z
-    .string({ error: "select product" })
-    .min(1, { message: "invalid product" }),
-  monday: z
-    .string({ error: "select product" })
-    .min(1, { message: "invalid product" }),
-  tuesday: z
-    .string({ error: "select product" })
-    .min(1, { message: "invalid product" }),
-  wednesday: z
-    .string({ error: "select product" })
-    .min(1, { message: "invalid product" }),
-  thursday: z
-    .string({ error: "select product" })
-    .min(1, { message: "invalid product" }),
-  friday: z
-    .string({ error: "select product" })
-    .min(1, { message: "invalid product" }),
-  saturday: z
-    .string({ error: "select product" })
-    .min(1, { message: "invalid product" }),
-
+  weeklyMenu: z
+    .array(z.string().min(1, { message: "invalid product" }))
+    .length(7, { message: "select product for all day" }),
+    
   price: z
     .string({ error: "enter price" })
     .regex(/^\d+$/, { message: "invalid amount" }),

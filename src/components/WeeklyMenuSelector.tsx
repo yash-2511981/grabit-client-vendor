@@ -1,6 +1,5 @@
 import useVendorStore from "@/store/store";
 import { useEffect, useMemo } from "react";
-import type { Day } from "@/types/types";
 import { days } from "@/lib/utils";
 import { useWatch, type Control } from "react-hook-form";
 import type { AddOrEditSubscriptionType } from "@/types/formType";
@@ -25,24 +24,10 @@ const WeeklyMenuSelector = ({
 
   const selectedMenuIds = useWatch({
     control: formControl,
-    name: days,
+    name: "weeklyMenu",
   });
 
-  const selectedMenu: Record<Day, string> = useMemo(() => {
-    const menu: Record<Day, string> = {
-      sunday: "",
-      monday: "",
-      tuesday: "",
-      wednesday: "",
-      thursday: "",
-      friday: "",
-      saturday: "",
-    };
-    days.forEach((day, index) => {
-      menu[day] = selectedMenuIds?.[index] || "";
-    });
-    return menu;
-  }, [selectedMenuIds]);
+  console.log(selectedMenuIds);
 
   const weeks = useMemo(() => {
     if (duration === "3m") return 12;
@@ -52,7 +37,7 @@ const WeeklyMenuSelector = ({
   }, [duration]);
 
   const costPerDish = useMemo(() => {
-    const array = Object.values(selectedMenu).filter((id) => id !== "");
+    const array = Object.values(selectedMenuIds).filter((id) => id !== "");
     const cost = products.reduce((initial, p) => {
       if (array.includes(p._id)) {
         return initial + Number(p.price);
@@ -71,14 +56,13 @@ const WeeklyMenuSelector = ({
       savingInPercent,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedMenu, price, duration]);
+  }, [selectedMenuIds, price, duration]);
 
   useEffect(() => {
     setSavingValue(costPerDish.savingInRupee);
   }, [costPerDish.savingInRupee, setSavingValue]);
 
   const getProductName = (id: string) => {
-    console.log("i am here");
     return products.find((p) => p._id === id) || undefined;
   };
 
@@ -90,19 +74,22 @@ const WeeklyMenuSelector = ({
     return filterProducts;
   }, [products, selectedMenuIds]);
 
+  console.log(menuProducts);
+
   return (
     <div className="space-y-2">
       <p className="text-sm font-medium border-b border-amber-200/50 pb-1">
         Weekly Menu
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
-        {days.map((d) => (
+        {days.map((d, i) => (
           <DailyMenuSelector
             key={d}
             getProductName={getProductName}
             menuProducts={menuProducts}
-            selectedMenu={selectedMenu}
+            selectedMenu={selectedMenuIds}
             formControl={formControl}
+            dayIndex={i}
             day={d}
           />
         ))}

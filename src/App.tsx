@@ -13,6 +13,7 @@ import ManageSubscriptions from "./pages/vendor/subscriptions/ManageSubscription
 import ManageWallet from "./pages/vendor/wallet/MangeWallet";
 import Dashboard from "./pages/vendor/dashboard/Dashboard";
 import ManageProduct from "./pages/vendor/products/ManageProduct";
+import { SocketProvider } from "./context/useSocketContext";
 interface RouteWrapperProps {
   children: ReactNode;
 }
@@ -80,7 +81,9 @@ function App() {
           path="/vendor"
           element={
             <PriavteRoutes>
-              <VendorLayout />
+              <SocketProvider>
+                <VendorLayout />
+              </SocketProvider>
             </PriavteRoutes>
           }
         >

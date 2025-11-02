@@ -27,7 +27,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import useApi from "@/hooks/useApi";
 import { UPDATE_PERSONAL_DETAILS } from "@/lib/routes";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import {
   viewOrEditPersonalDetailsSchema,
   type ViewOrEditPersonalDetailsSchema,

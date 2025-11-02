@@ -3,7 +3,7 @@ import { Switch } from "@/components/ui/switch";
 import UpdatePasswordModal from "@/components/UpdatePasswordModal";
 import useApi from "@/hooks/useApi";
 import { UPDATE_PERMISSIONS } from "@/lib/routes";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import { Settings } from "lucide-react";
 
 const AccountSettings = () => {

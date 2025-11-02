@@ -1,4 +1,4 @@
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import SubscriptionCard from "./Subscription";
 
 interface SubscriptionProps {

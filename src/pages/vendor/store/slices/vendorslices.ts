@@ -1,13 +1,16 @@
 import { mockNotifications } from "@/lib/data";
-import type { PendingOrder, Vendor, VendorSlices } from "src/types/vendor";
+import type { Vendor, VendorSlices } from "src/types/vendor";
 import type { StateCreator } from "zustand";
 
 export const vendorSlices: StateCreator<VendorSlices> = (set, get) => ({
   vendor: null,
   pendingOrders: [],
-  addPendingOrder: (order: PendingOrder) => {
+  setPendingOrders: (pendingOrders) => {
+    set({ pendingOrders });
+  },
+  addPendingOrder: (pendingOrder) => {
     const orders = [...get().pendingOrders];
-    orders.push(order);
+    orders.push(pendingOrder);
     set({ pendingOrders: orders });
   },
   setVendor: (vendor: Vendor) => set({ vendor }),

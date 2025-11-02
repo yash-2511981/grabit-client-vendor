@@ -51,3 +51,6 @@ export const ADD_SUBSCRIPTION = `${AUTH_ROUTES}/add-subscription`;
 export const UPDATE_SUBSCRIPTION = `${AUTH_ROUTES}/update-subscription`;
 export const DELETE_SUBSCRIPTIONS = `${AUTH_ROUTES}/delete-subscriptions`;
 export const GET_ALL_SUBSCRIPTIONS = `${AUTH_ROUTES}/get-all-subscriptions`;
+
+//order routes
+export const GET_ALL_ORDERS =  `${AUTH_ROUTES}/get-all-orders`

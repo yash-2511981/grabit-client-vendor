@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import { BellIcon } from "lucide-react";
 import { useCallback } from "react";
 

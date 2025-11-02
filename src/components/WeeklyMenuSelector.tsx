@@ -1,4 +1,4 @@
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import { useEffect, useMemo } from "react";
 import { days } from "@/lib/utils";
 import { useWatch, type Control } from "react-hook-form";

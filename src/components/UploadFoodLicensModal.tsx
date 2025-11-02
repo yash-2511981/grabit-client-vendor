@@ -38,7 +38,7 @@ import { format } from "date-fns";
 import useApi from "@/hooks/useApi";
 import { GET_URL_FOR_PRIVATE_DOC, UPLOAD_FOOD_LICENSE } from "@/lib/routes";
 import { toast } from "sonner";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 
 const UploadFoodLicensModal = () => {
   const form = useForm<FoodLicensModelType>({
@@ -90,7 +90,7 @@ const UploadFoodLicensModal = () => {
       method: "POST",
       body: formData,
     });
-    
+
     if (!cloudinaryResult.ok) {
       toast.error("Failed to upload file");
       setLoading(false);
@@ -107,7 +107,7 @@ const UploadFoodLicensModal = () => {
       },
       "File Uploaded successfully"
     );
-    
+
     if (result?.success) {
       setVendorDocuments(result.data.vendorDocs);
     }
@@ -130,7 +130,11 @@ const UploadFoodLicensModal = () => {
     <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger asChild>
         <Button
-          title={documents?.foodLicensIssueDate ? "Replace document" : "Upload document"}
+          title={
+            documents?.foodLicensIssueDate
+              ? "Replace document"
+              : "Upload document"
+          }
           className="gap-2"
         >
           {documents?.foodLicensIssueDate ? (

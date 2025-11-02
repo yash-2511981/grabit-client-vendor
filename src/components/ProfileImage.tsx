@@ -1,6 +1,6 @@
 import useApi from "@/hooks/useApi";
 import { ADD_RESTAURANT_IMAGE, SAVE_RESTAURANT_IMG } from "@/lib/routes";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import { imageValidation } from "@/types/formType";
 import { Edit, User2 } from "lucide-react";
 import type React from "react";

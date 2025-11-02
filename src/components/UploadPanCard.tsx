@@ -1,6 +1,6 @@
 import useApi from "@/hooks/useApi";
 import { GET_URL_FOR_PRIVATE_DOC, UPLOAD_PAN } from "@/lib/routes";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import { panCardModalSchema, type PanCardModalType } from "@/types/formType";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRef, useState } from "react";

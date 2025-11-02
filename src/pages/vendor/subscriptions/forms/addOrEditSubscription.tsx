@@ -32,7 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import WeeklyMenuSelector from "@/components/WeeklyMenuSelector";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import type { Subscription } from "@/types/vendor";
 import { toast } from "sonner";
 
@@ -59,9 +59,7 @@ const AddOrEditSubscriptions = ({
   });
 
   const onSubmit = async (data: AddOrEditSubscriptionType) => {
-    
     const isEdit = !!editSubscription;
-    
 
     //check any changes are made while editing
     if (isEdit) {

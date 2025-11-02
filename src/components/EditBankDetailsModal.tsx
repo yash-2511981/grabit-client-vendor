@@ -20,7 +20,7 @@ import { toast } from "sonner";
 import { Building2, Save, X } from "lucide-react";
 import useApi from "@/hooks/useApi";
 import { ADD_BANK_DETAILS, GET_ORIGINAL_BANK_DETAILS } from "@/lib/routes";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import apiCLient from "@/lib/axios-client";
 
 const EditBankDetailsModal = ({ onClose }: { onClose: () => void }) => {

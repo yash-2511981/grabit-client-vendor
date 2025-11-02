@@ -4,7 +4,7 @@ import { Edit, PlusIcon, StoreIcon, Trash } from "lucide-react";
 import { useState } from "react";
 import AddOrEditProduct from "./forms/AddOrEditProduct";
 import { Button } from "@/components/ui/button";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import ViewProducts from "../../../components/ViewProducts";
 import DialogBox from "@/components/DialogueBox";
 import useApi from "@/hooks/useApi";

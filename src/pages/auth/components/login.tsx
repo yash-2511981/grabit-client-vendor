@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useApi from "@/hooks/useApi";
 import { SIGN_IN } from "@/lib/routes";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import { useNavigate } from "react-router-dom";
 
 interface LoginProps {

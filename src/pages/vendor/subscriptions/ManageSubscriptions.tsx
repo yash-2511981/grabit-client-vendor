@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import AddOrEditSubscriptions from "./forms/addOrEditSubscription";
 import useApi from "@/hooks/useApi";
 import { DELETE_SUBSCRIPTIONS, GET_ALL_SUBSCRIPTIONS } from "@/lib/routes";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import Subscriptions from "@/components/Subscriptions";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";

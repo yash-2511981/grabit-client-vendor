@@ -9,7 +9,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Edit, Building2, MessageCircleWarning } from "lucide-react";
 import { useEffect, useState } from "react";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import EditBankDetailsModal from "@/components/EditBankDetailsModal";
 import useApi from "@/hooks/useApi";
 import { GET_BANK_DETAILS } from "@/lib/routes";

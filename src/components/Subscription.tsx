@@ -1,4 +1,4 @@
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import type { Subscription } from "@/types/vendor";
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Check, TrendingDown } from "lucide-react";

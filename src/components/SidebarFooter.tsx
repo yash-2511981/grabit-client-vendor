@@ -1,6 +1,6 @@
 import useApi from "@/hooks/useApi";
 import { SIGN_OUT, UPDATE_STATUS } from "@/lib/routes";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import { Button } from "./ui/button";
 import { LogOut } from "lucide-react";
 import { Switch } from "./ui/switch";

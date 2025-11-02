@@ -6,7 +6,7 @@ import UploadFoodLicensModal from "@/components/UploadFoodLicensModal";
 import UploadPanCard from "@/components/UploadPanCard";
 import useApi from "@/hooks/useApi";
 import { GET_VENDOR_DOC, GET_VIEW_URL } from "@/lib/routes";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import { format } from "date-fns";
 import { Eye, FolderClosed } from "lucide-react";
 import { useEffect } from "react";

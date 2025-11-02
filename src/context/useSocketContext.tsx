@@ -1,4 +1,4 @@
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import type { PendingOrder } from "@/types/vendor";
 import { createContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";

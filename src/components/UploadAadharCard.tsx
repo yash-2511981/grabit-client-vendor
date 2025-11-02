@@ -1,6 +1,6 @@
 import useApi from "@/hooks/useApi";
 import { GET_URL_FOR_PRIVATE_DOC, UPLOAD_AADHAR } from "@/lib/routes";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import {
   aadharCardModalSchema,
   type AadharCardModalType,
@@ -93,7 +93,7 @@ const UploadAadharCard = () => {
       },
       "Aadhar Card uploaded"
     );
-    
+
     if (result?.success) {
       setVendorDocuments(result.data.vendorDocs);
     }

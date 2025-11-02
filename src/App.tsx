@@ -1,11 +1,15 @@
 import { useEffect, type ReactNode } from "react";
-import useAdminStore from "./store/store";
+import useAdminStore from "./pages/vendor/store/store";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Landing from "./pages/landing/landing";
 import Auth from "./pages/auth/Auth";
 import useApi from "./hooks/useApi";
-import { GET_ALL_PRODUCTS, GET_VENDOR_INFO } from "./lib/routes";
-import useVendorStore from "./store/store";
+import {
+  GET_ALL_ORDERS,
+  GET_ALL_PRODUCTS,
+  GET_VENDOR_INFO,
+} from "./lib/routes";
+import useVendorStore from "./pages/vendor/store/store";
 import VendorLayout from "./pages/vendor/VendorLayout";
 import ManageOrders from "./pages/vendor/orders/ManageOrders";
 import ManageProfile from "./pages/vendor/profile/ManageProfile";
@@ -32,7 +36,8 @@ function PriavteRoutes({ children }: RouteWrapperProps) {
 
 function App() {
   const { get } = useApi();
-  const { setVendor, setProducts, vendor, setOpen } = useVendorStore();
+  const { setVendor, setProducts, vendor, setOpen, setPendingOrders } =
+    useVendorStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,9 +55,15 @@ function App() {
   useEffect(() => {
     if (!vendor) return;
     const fetchData = async () => {
-      const [productData] = await Promise.all([get(GET_ALL_PRODUCTS)]);
+      const [productData, orderData] = await Promise.all([
+        get(GET_ALL_PRODUCTS),
+        get(GET_ALL_ORDERS),
+      ]);
       if (productData?.success) {
         setProducts(productData.data.products);
+      }
+      if (orderData?.success) {
+        setPendingOrders(orderData.data.pendingOrders);
       }
     };
     fetchData();

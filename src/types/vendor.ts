@@ -78,7 +78,13 @@ export type Notification = {
 
 export type PendingOrder = {
   _id: string;
-  products: [];
+  products: {
+    product: string;
+    name: string;
+    imageUrl: string;
+    price: number;
+    quantity: number;
+  }[];
   amount: number;
 };
 
@@ -92,7 +98,8 @@ export type VendorSlices = {
   subscriptions: Subscription[];
   notifications: Notification[];
   pendingOrders: PendingOrder[];
-  addPendingOrder: (order: PendingOrder) => void;
+  setPendingOrders: (pendingOrders: PendingOrder[]) => void;
+  addPendingOrder: (pendingOrder: PendingOrder) => void;
   setVendor: (admin: Vendor) => void;
   setVendorDocuments: (docs: VendorDocuments) => void;
   setBankDetails: (details: BankDetailsType) => void;

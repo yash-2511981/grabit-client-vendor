@@ -1,6 +1,6 @@
 import useApi from "@/hooks/useApi";
 import { GET_ALL_PRODUCTS } from "@/lib/routes";
-import useVendorStore from "@/store/store";
+import useVendorStore from "@/pages/vendor/store/store";
 import { Check, Package } from "lucide-react";
 import { useEffect, useState } from "react";
 import CategoryBadge from "./CategoryBadge";

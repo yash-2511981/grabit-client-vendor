@@ -4,10 +4,16 @@ import useVendorStore from "@/store/store";
 import { Button } from "./ui/button";
 import { LogOut } from "lucide-react";
 import { Switch } from "./ui/switch";
+import { useEffect, useState } from "react";
 
 const SidebarFooter = () => {
   const { vendor, logout, setOpen, open } = useVendorStore();
   const { get, patch } = useApi();
+  const [isOpen, setIsOpen] = useState<boolean | undefined>(undefined);
+
+  useEffect(() => {
+    setIsOpen(open);
+  }, [open]);
 
   const handlLogout = async () => {
     try {
@@ -21,7 +27,9 @@ const SidebarFooter = () => {
   };
 
   const handleSwitchClick = async (checked: boolean) => {
-    const successMessage = checked ? "Ready to receive orders!" : "You're offline.";
+    const successMessage = checked
+      ? "Ready to receive orders!"
+      : "You're offline.";
     const result = await patch(
       UPDATE_STATUS,
       { status: checked },
@@ -31,6 +39,7 @@ const SidebarFooter = () => {
       setOpen(checked);
     }
   };
+
   return (
     <div className="mt-auto p-3 space-y-3  border-amber-300/60">
       {/* Status indicator */}
@@ -49,6 +58,7 @@ const SidebarFooter = () => {
         <Switch
           id="go_live"
           className="data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-amber-500 data-[state=checked]:to-amber-600"
+          checked={isOpen}
           onCheckedChange={handleSwitchClick}
         />
       </div>

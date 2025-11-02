@@ -32,7 +32,7 @@ function PriavteRoutes({ children }: RouteWrapperProps) {
 
 function App() {
   const { get } = useApi();
-  const { setVendor, setProducts, vendor } = useVendorStore();
+  const { setVendor, setProducts, vendor, setOpen } = useVendorStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +40,7 @@ function App() {
 
       if (getVendorData?.success) {
         setVendor(getVendorData.data.restaurant);
+        setOpen(getVendorData.data.status);
       }
     };
     fetchData();

@@ -1,5 +1,5 @@
 export type Vendor = {
-  id: string;
+  _id: string;
   name?: string;
   email?: string;
   phone?: string;
@@ -76,32 +76,40 @@ export type Notification = {
   type: "warning" | "code" | "update";
 };
 
+export type PendingOrder = {
+  _id: string;
+  products: [];
+  amount: number;
+};
+
 export type VendorSlices = {
   vendor: Vendor | null;
-  setVendor: (admin: Vendor) => void;
   bankDetails: BankDetailsType | null;
   documents: VendorDocuments | null;
+  open: boolean | undefined;
+  products: ProductType[];
+  selectedProducts: string[];
+  subscriptions: Subscription[];
+  notifications: Notification[];
+  pendingOrders: PendingOrder[];
+  addPendingOrder: (order: PendingOrder) => void;
+  setVendor: (admin: Vendor) => void;
   setVendorDocuments: (docs: VendorDocuments) => void;
   setBankDetails: (details: BankDetailsType) => void;
-  open: boolean | undefined;
   setOpen: (open: boolean) => void;
-  products: ProductType[];
   emptySelectedProduct: () => void;
   setProducts: (products: ProductType[]) => void;
   addNewProduct: (product: ProductType) => void;
   updateProducts: (product: ProductType) => void;
   deleteProducts: () => void;
-  selectedProducts: string[];
   selectProduct: (product: string) => void;
   deselectProduct: (product: string) => void;
   getEditProduct: (product: string | null) => ProductType | null;
-  subscriptions: Subscription[];
   setSubscriptions: (subscriptions: Subscription[]) => void;
   addSubscription: (subscription: Subscription) => void;
   updateSubscription: (subscription: Subscription) => void;
   deleteSubscriptions: (subscriptionIds: string[]) => void;
   getEditSubscription: (id: string) => Subscription | undefined;
-  notifications: Notification[];
   setNotifications: (notifications: Notification[]) => void;
   addNotifications: (Notification: Notification) => void;
   logout: () => void;

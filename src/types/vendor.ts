@@ -86,6 +86,7 @@ export type PendingOrder = {
     quantity: number;
   }[];
   amount: number;
+  status: "pending" | "picked" | "delivered" | "cancled";
 };
 
 export type VendorSlices = {

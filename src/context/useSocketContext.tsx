@@ -1,16 +1,17 @@
+import { useToast } from "@/hooks/useToast";
 import useVendorStore from "@/pages/vendor/store/store";
 import type { PendingOrder } from "@/types/vendor";
 import { createContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { toast } from "sonner";
 
 const SocketContext = createContext<Socket | null>(null);
 
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const { open, vendor, addPendingOrder } = useVendorStore();
+  const toast = useToast();
 
-  //function for connecting to server.
+  //function for connecting to backend socket server.
   const connectToSocketServer = () => {
     if (vendor?._id === undefined) return;
 
@@ -41,14 +42,13 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     //socket event to handle a new order event
     const handleNewOrder = ({ order }: { order: PendingOrder }) => {
       addPendingOrder(order);
-      toast.success("New Order is placed please check out");
+      toast.order(
+        "New Order Received",
+        "A new order has been placed."
+      );
     };
 
     newSocket?.on("new_order", handleNewOrder);
-
-    //clean up function to disconnect the socket connection when its unnecessary.
-    window.addEventListener("beforeunload", disconnectSocket);
-    window.addEventListener("offline", disconnectSocket);
 
     //reconnecting the disconnected user again with socket.
     const handleOnline = () => {
@@ -59,6 +59,10 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
         }
       }
     };
+
+    //clean up function to disconnect the socket connection when its unnecessary.
+    window.addEventListener("beforeunload", disconnectSocket);
+    window.addEventListener("offline", disconnectSocket);
 
     window.addEventListener("online", handleOnline);
 
